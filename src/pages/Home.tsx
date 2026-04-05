@@ -215,37 +215,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Success Stories CTA Section */}
-      <section className="py-16 lg:py-24 px-6 lg:px-8 bg-indigo-900 text-white overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-emerald-600/10 skew-x-12 translate-x-1/4 pointer-events-none" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Real Stories, Real Impact</h2>
-              <p className="text-indigo-100 text-lg mb-8 leading-relaxed">
-                Over the years, PSS Trust has empowered thousands of students to achieve their dreams. From first-generation engineers to healthcare professionals, our alumni are making a difference across the globe.
-              </p>
-              <Link 
-                to="/success-stories" 
-                className="inline-flex items-center gap-3 px-8 py-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-500 transition-all shadow-lg group"
-              >
-                Read Success Stories
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=400" alt="Student" className="rounded-2xl shadow-xl w-full aspect-square object-cover" referrerPolicy="no-referrer" />
-                <img src="https://images.unsplash.com/photo-1524178232363-1fb28f74b583?auto=format&fit=crop&q=80&w=400" alt="Classroom" className="rounded-2xl shadow-xl w-full aspect-[3/4] object-cover" referrerPolicy="no-referrer" />
-              </div>
-              <div className="space-y-4 pt-8">
-                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=400" alt="Graduation" className="rounded-2xl shadow-xl w-full aspect-[3/4] object-cover" referrerPolicy="no-referrer" />
-                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=400" alt="Team" className="rounded-2xl shadow-xl w-full aspect-square object-cover" referrerPolicy="no-referrer" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Student Prospects Section */}
       <section id="student" className="py-16 lg:py-24 px-6 lg:px-8 max-w-7xl mx-auto">

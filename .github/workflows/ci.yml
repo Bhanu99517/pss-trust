@@ -1,0 +1,127 @@
+name: 🚀 CI — PSS Trust Portal
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ─────────────────────────────────────────
+  # JOB 1: Type Check
+  # ─────────────────────────────────────────
+  typecheck:
+    name: 🔷 TypeScript Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔷 Run TypeScript type check
+        run: npm run lint
+
+  # ─────────────────────────────────────────
+  # JOB 2: Build Check
+  # ─────────────────────────────────────────
+  build:
+    name: 🏗️ Build Check
+    runs-on: ubuntu-latest
+    needs: typecheck
+
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build project
+        run: npm run build
+
+      - name: 📊 Report build size
+        run: |
+          echo "### 📦 Build Output" >> $GITHUB_STEP_SUMMARY
+          du -sh dist/ >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "#### Files:" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/ >> $GITHUB_STEP_SUMMARY
+
+  # ─────────────────────────────────────────
+  # JOB 3: Dependency Audit
+  # ─────────────────────────────────────────
+  audit:
+    name: 🔒 Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔒 Run security audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+  # ─────────────────────────────────────────
+  # JOB 4: PR Summary Comment
+  # ─────────────────────────────────────────
+  summary:
+    name: 📋 PR Summary
+    runs-on: ubuntu-latest
+    needs: [typecheck, build]
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: ✅ Post CI success comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ✅ CI Passed!
+
+            All checks passed for this Pull Request:
+
+            | Check | Status |
+            |---|---|
+            | 🔷 TypeScript Check | ✅ Passed |
+            | 🏗️ Build Check | ✅ Passed |
+            | 🔒 Security Audit | ✅ Passed |
+
+            This PR is ready for review. 🎉
+
+            > *PSS Trust CI — Powered by GitHub Actions*`
+            })

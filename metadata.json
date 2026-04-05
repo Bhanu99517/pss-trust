@@ -1,0 +1,5 @@
+{
+  "name": "PSS Trust ",
+  "description": "A website for Potukuchi Somasundara Social Welfare & Charitable Trust (PSS Trust), an NGO dedicated to student success and quality education.",
+  "requestFramePermissions": ["camera"]
+}

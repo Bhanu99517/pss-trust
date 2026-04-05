@@ -1,0 +1,1 @@
+export const CHAIRMAN_EMAIL = import.meta.env.VITE_CHAIRMAN_EMAIL;

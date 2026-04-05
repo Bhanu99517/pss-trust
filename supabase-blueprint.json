@@ -1,0 +1,102 @@
+{
+  "entities": {
+    "students": {
+      "title": "Student",
+      "description": "Student registration details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "Primary key (UUID)" },
+        "sid": { "type": "string", "description": "Unique Student ID (SID)" },
+        "full_name": { "type": "string", "description": "Full name of the student" },
+        "father_name": { "type": "string", "description": "Father's name" },
+        "mother_name": { "type": "string", "description": "Mother's name" },
+        "dob": { "type": "string", "format": "date", "description": "Date of birth" },
+        "gender": { "type": "string", "description": "Gender" },
+        "mobile_number": { "type": "string", "description": "Mobile number" },
+        "email": { "type": "string", "format": "email", "description": "Email ID" },
+        "address": { "type": "string", "description": "Residential address" },
+        "trust_branch": { "type": "string", "description": "PSS Trust Branch" },
+        "ssc_school": { "type": "string", "description": "SSC School Name" },
+        "ssc_board": { "type": "string", "description": "SSC Board" },
+        "ssc_year": { "type": "integer", "description": "SSC Year of Passing" },
+        "ssc_percentage": { "type": "number", "description": "SSC Percentage" },
+        "course_type": { "type": "string", "enum": ["diploma", "btech"], "description": "Course type" },
+        "college_name": { "type": "string", "description": "Diploma College name" },
+        "branch": { "type": "string", "description": "Diploma Branch" },
+        "year_of_joining": { "type": "integer", "description": "Diploma Year of joining" },
+        "pin_number": { "type": "string", "description": "Diploma PIN number" },
+        "diploma_percentage": { "type": "number", "description": "Diploma percentage" },
+        "btech_college": { "type": "string", "description": "B.Tech College name" },
+        "btech_year": { "type": "string", "description": "B.Tech Current year" },
+        "btech_branch": { "type": "string", "description": "B.Tech Branch" },
+        "university_name": { "type": "string", "description": "University name (optional for B.Tech)" },
+        "created_at": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["sid", "full_name", "dob", "mobile_number", "trust_branch"]
+    },
+    "attendance": {
+      "title": "Attendance",
+      "description": "Daily attendance records",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "Primary key" },
+        "student_id": { "type": "string", "format": "uuid", "description": "Foreign key to students.id" },
+        "date": { "type": "string", "format": "date", "description": "Attendance date" },
+        "status": { "type": "string", "description": "Attendance status (present, absent, etc.)" }
+      },
+      "required": ["student_id", "date", "status"]
+    },
+    "attendance_faces": {
+      "title": "Attendance Faces",
+      "description": "Face descriptors for attendance verification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "Primary key" },
+        "student_id": { "type": "string", "format": "uuid", "description": "Foreign key to students.id" },
+        "face_descriptor": { "type": "array", "items": { "type": "number" }, "description": "128-dimensional face descriptor" },
+        "image_url": { "type": "string", "description": "URL of the stored face image" },
+        "created_at": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["student_id", "face_descriptor"]
+    },
+    "applications": {
+      "title": "Fee Application",
+      "description": "Student fee applications",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "Primary key" },
+        "sid": { "type": "string", "description": "SID of the student" },
+        "full_name": { "type": "string", "description": "Full name of the student" },
+        "college_name": { "type": "string", "description": "College name" },
+        "pin_number": { "type": "string", "description": "PIN number" },
+        "phone_number": { "type": "string", "description": "Phone number" },
+        "email": { "type": "string", "format": "email", "description": "Email address" },
+        "requesting_for": { "type": "string", "description": "Request purpose" },
+        "academic_data": { "type": "array", "items": { "type": "object" }, "description": "Academic records" },
+        "contribution": { "type": "string", "description": "Student contribution" },
+        "file_url": { "type": "string", "description": "URL of the uploaded file" },
+        "status": { "type": "string", "description": "Application status (pending, approved, rejected)" },
+        "created_at": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["sid", "full_name", "email"]
+    }
+  },
+  "firestore": {
+    "students": {
+      "schema": "students",
+      "description": "Main students collection"
+    },
+    "attendance": {
+      "schema": "attendance",
+      "description": "Attendance records collection"
+    },
+    "attendance_faces": {
+      "schema": "attendance_faces",
+      "description": "Face descriptors collection"
+    },
+    "applications": {
+      "schema": "applications",
+      "description": "Fee applications collection"
+    }
+  }
+}

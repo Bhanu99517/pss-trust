@@ -55,6 +55,7 @@ const stories = [
     maritalStatus: "Married",
     image: "https://picsum.photos/seed/venkatesh/400/400"
   }
+  
 ];
 
 export default function SuccessStories() {

@@ -30,17 +30,17 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/b57e5e3a-6913-4c1b-84f2-71cdd2b6d582.jpg"
   },
   {
-    name: "Priyanka Sharma",
-    education: "B.Tech Computer Science",
-    fatherProfession: "Small Scale Farmer",
-    joinedYear: "2010",
+    name: "Ganna Swathi",
+    education: "B.Tech CVSR - CIVIL",
+    fatherProfession: "Deceased father was a daily wage worker",
+    joinedYear: " : 2006",
     studied: "Schooling, Diploma, and B.Tech",
-    company: "Accenture",
-    designation: "Data Analyst",
-    package: "12 LPA",
-    siblings: "1 Younger brother",
-    maritalStatus: "Single",
-    image: "https://picsum.photos/seed/priyanka/400/400"
+    company: "Rural Water Supply, Govt of Telangan",
+    designation: "AE (Assistant Engineer)",
+    package: " 10 LPA",
+    siblings: " 1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/9776d871-24c9-477e-aa8e-55c04ea6b8d4.jpg"
   },
   {
     name: "Venkatesh Rao",

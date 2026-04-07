@@ -18,44 +18,68 @@ const stories = [
   },
   {
     name: "Ala Sravanthi",
-    education: "B.Tech Mechanical Engineering",
-    fatherProfession: "Daily Wage Laborer",
-    joinedYear: "2008",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Father is a  Tailor",
+    joinedYear: "2006",
     studied: "10th, Intermediate, and B.Tech",
-    company: "Tata Motors",
-    designation: "Senior Design Engineer",
-    package: "15 LPA",
-    siblings: "2 Younger sisters (both studying)",
-    maritalStatus: "Single",
-    image: "https://picsum.photos/seed/sravan/400/400"
+    company: "Bank Of America",
+    designation: " Software Engineer 2",
+    package: " 20 LPA",
+    siblings: " 1 Elder brother physically handicapped",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/b57e5e3a-6913-4c1b-84f2-71cdd2b6d582.jpg"
   },
   {
-    name: "Priyanka Sharma",
-    education: "B.Tech Computer Science",
-    fatherProfession: "Small Scale Farmer",
-    joinedYear: "2010",
+    name: "Ganna Swathi",
+    education: "B.Tech CVSR - CIVIL",
+    fatherProfession: "Deceased father was a daily wage worker",
+    joinedYear: " : 2006",
     studied: "Schooling, Diploma, and B.Tech",
-    company: "Accenture",
-    designation: "Data Analyst",
-    package: "12 LPA",
-    siblings: "1 Younger brother",
-    maritalStatus: "Single",
-    image: "https://picsum.photos/seed/priyanka/400/400"
+    company: "Rural Water Supply, Govt of Telangan",
+    designation: "AE (Assistant Engineer)",
+    package: " 10 LPA",
+    siblings: " 1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/9776d871-24c9-477e-aa8e-55c04ea6b8d4.jpg"
   },
   {
-    name: "Venkatesh Rao",
-    education: "B.Tech Civil Engineering",
-    fatherProfession: "Tailor",
-    joinedYear: "2007",
+    name: "M. Swapna",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Deceased Father was a Daily wages worker",
+    joinedYear: "2006",
     studied: "High School and B.Tech",
-    company: "L&T Construction",
-    designation: "Project Manager",
-    package: "18 LPA",
-    siblings: "No siblings",
-    maritalStatus: "Married",
-    image: "https://picsum.photos/seed/venkatesh/400/400"
+    company: "Capgemini",
+    designation: " Software Engineer",
+    package: "10 LPA",
+    siblings: "1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/7a0d93cf-5ae7-4d6a-bf3c-211359def5ec.jpg"
+  },
+  {
+    name: "Sharanamma",
+    education: "B.Tech DRK - ECE",
+    fatherProfession: "Father’ is a Daily wage worker",
+    joinedYear: "2006",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Self employed",
+    package: " 6 LPA",
+    siblings: "  1 Younger brother",
+    maritalStatus: " Married, Husband working in private company",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e06ee21f-20cb-4d33-b854-4a28db1058c7.jpg"
+  },
+  {
+    name: "P Chamanthi ",
+    education: " IIIT Basara-ECE",
+    fatherProfession: "Father is a Daily wages worker",
+    joinedYear: "2007",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Pega Systems India",
+    designation: " Software Engineer 2",
+    package: "12 LPA",
+    siblings: " 1 Younger sister and 1 Elder sister",
+    maritalStatus: " Single",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
   }
-  
 ];
 
 export default function SuccessStories() {

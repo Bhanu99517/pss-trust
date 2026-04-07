@@ -22,6 +22,18 @@ const images = [
     url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/739400e4-e418-4e8a-9c42-cddfa08d7544.jpg"
   },
   {
+    url : "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/855f571e-bf2a-49af-8489-ecd2a9620a83.jpeg"
+  },
+  {
+    url : "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/c69529a8-311a-419f-adeb-df9cd3af9438.jpg"
+  },
+   {
+    url : "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1ad28687-e12b-4c93-92ea-471e5a0a5eea.jpg"
+  },
+  {
+    url : "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a7aad6d0-99e3-4bba-bd7d-079d8ca44759.jpg"
+  },
+  {
     url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/b266f044-4c1c-4f3b-823f-f9cea6aaabf0.jpg"
   },
   {
@@ -71,6 +83,21 @@ const images = [
   },
   {
     url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/e374ed58-81a8-45ac-ad7e-453f09ace2ab.jpg"
+  },
+  {
+    url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/76199a7d-ee77-4da8-8c15-0e8fbca6edc9.jpg"
+  },
+   {
+    url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/bcae1156-b60a-49d8-ade8-480babbc0c30.jpg"
+  },
+   {
+    url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/c49da551-52b4-43a0-857c-634310904541.jpg"
+  },
+   {
+    url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/59b362e2-a3c9-4fe8-a389-8d76018d85d5.webp"
+  },
+  {
+    url:"https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/94a3be94-860f-4fee-80e1-47708d0fbbd9.jpg"
   }
 ];
 

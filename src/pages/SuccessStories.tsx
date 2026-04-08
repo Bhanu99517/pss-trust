@@ -101,7 +101,7 @@ export default function SuccessStories() {
               key={idx}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-100 p-6 lg:p-10 w-[320px] sm:w-full pl-6 sm:pl-6 lg:p-10 ml-[-5px] sm:ml-0 mr-0"
+              className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-100 p-6 lg:p-10 w-full sm:w-full pl-6 sm:pl-6 lg:p-10 mx-auto sm:mx-0"
             >
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-12">
                 {/* Image Frame similar to the image */}
@@ -114,7 +114,7 @@ export default function SuccessStories() {
                   />
                 </div>
 
-                <div className="flex-1 w-[286.4px] sm:w-full ml-[-7px] sm:ml-0">
+                <div className="flex-1 w-full">
                   <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-teal-900 mb-6 border-b border-slate-100 pb-4">
                     {story.name} ({story.education})
                   </h2>

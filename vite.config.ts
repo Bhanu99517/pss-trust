@@ -63,6 +63,7 @@ export default defineConfig(({ mode }) => {
           name: 'PSS Trust Student Portal',
           short_name: 'PSS Trust',
           description: 'Student management portal for PSS Trust NGO',
+          id: '/',                          // ← fixes "add an id" warning
           theme_color: '#1a1a2e',
           background_color: '#ffffff',
           display: 'standalone',
@@ -97,14 +98,14 @@ export default defineConfig(({ mode }) => {
           screenshots: [
             {
               src: '/screenshot-mobile.png',
-              sizes: '390x844',
+              sizes: '720x1600',
               type: 'image/png',
               form_factor: 'narrow',
               label: 'PSS Trust Student Portal'
             },
             {
               src: '/screenshot-desktop.png',
-              sizes: '1280x800',
+              sizes: '1905x1036',
               type: 'image/png',
               form_factor: 'wide',
               label: 'PSS Trust Student Portal'

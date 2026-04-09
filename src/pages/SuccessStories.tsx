@@ -17,45 +17,6 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
   {
-    name: "Ala Sravanthi",
-    education: "B.Tech CBIT - ECE",
-    fatherProfession: "Father is a  Tailor",
-    joinedYear: "2006",
-    studied: "10th, Intermediate, and B.Tech",
-    company: "Bank Of America",
-    designation: " Software Engineer 2",
-    package: " 20 LPA",
-    siblings: " 1 Elder brother physically handicapped",
-    maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/b57e5e3a-6913-4c1b-84f2-71cdd2b6d582.jpg"
-  },
-  {
-    name: "Ganna Swathi",
-    education: "B.Tech CVSR - CIVIL",
-    fatherProfession: "Deceased father was a daily wage worker",
-    joinedYear: " : 2006",
-    studied: "Schooling, Diploma, and B.Tech",
-    company: "Rural Water Supply, Govt of Telangan",
-    designation: "AE (Assistant Engineer)",
-    package: " 10 LPA",
-    siblings: " 1 Elder brother",
-    maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/9776d871-24c9-477e-aa8e-55c04ea6b8d4.jpg"
-  },
-  {
-    name: "M. Swapna",
-    education: "B.Tech CBIT - ECE",
-    fatherProfession: "Deceased Father was a Daily wages worker",
-    joinedYear: "2006",
-    studied: "High School and B.Tech",
-    company: "Capgemini",
-    designation: " Software Engineer",
-    package: "10 LPA",
-    siblings: "1 Elder brother",
-    maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/7a0d93cf-5ae7-4d6a-bf3c-211359def5ec.jpg"
-  },
-  {
     name: "Sharanamma",
     education: "B.Tech DRK - ECE",
     fatherProfession: "Father’ is a Daily wage worker",
@@ -92,7 +53,46 @@ const stories = [
     siblings: "1 Younger Sister",
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1ed7b5aa-b66f-44c3-9447-5e8bb875a2c9.png"
-  }
+  },
+   {
+    name: "Ala Sravanthi",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Father is a  Tailor",
+    joinedYear: "2006",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Bank Of America",
+    designation: " Software Engineer 2",
+    package: " 20 LPA",
+    siblings: " 1 Elder brother physically handicapped",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8b530164-279c-4a82-b164-6ddfa02bcb1b.png"
+  },
+   {
+    name: "Ganna Swathi",
+    education: "B.Tech CVSR - CIVIL",
+    fatherProfession: "Deceased father was a daily wage worker",
+    joinedYear: " : 2006",
+    studied: "Schooling, Diploma, and B.Tech",
+    company: "Rural Water Supply, Govt of Telangan",
+    designation: "AE (Assistant Engineer)",
+    package: " 10 LPA",
+    siblings: " 1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a026f84a-864a-4f5d-b23e-dee845a5d9f0.png"
+  },
+  {
+    name: "M. Swapna",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Deceased Father was a Daily wages worker",
+    joinedYear: "2006",
+    studied: "High School and B.Tech",
+    company: "Capgemini",
+    designation: " Software Engineer",
+    package: "10 LPA",
+    siblings: "1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e31b1d5a-3acd-475d-a42c-1e55ed1c047b.png"
+  },
 ];
 
 export default function SuccessStories() {

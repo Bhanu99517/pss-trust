@@ -80,7 +80,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
   const [approvalComment, setApprovalComment] = useState('');
   const [showApprovalModal, setShowApprovalModal] = useState(false);
 
-  const [inchargeBranch, setInchargeBranch] = useState<string | null>(null);
+  const [inchargeBranches, setInchargeBranches] = useState<string[]>([]);
   const [isLoadingBranch, setIsLoadingBranch] = useState(true);
 
   useEffect(() => {
@@ -96,11 +96,12 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
           
           if (inchargeError) throw inchargeError;
           if (inchargeData) {
-            setInchargeBranch(inchargeData.branch);
-            // Fetch data after getting the branch
-            fetchStudents(inchargeData.branch);
-            fetchApplications(inchargeData.branch);
-            fetchAttendanceLogs(inchargeData.branch);
+            const branches = inchargeData.branch.split(',').map((b: string) => b.trim());
+            setInchargeBranches(branches);
+            // Fetch data after getting the branches
+            fetchStudents(branches);
+            fetchApplications(branches);
+            fetchAttendanceLogs(branches);
           }
         }
       } catch (error) {
@@ -122,12 +123,12 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
     onLogout();
   };
 
-  const fetchStudents = async (branch: string) => {
+  const fetchStudents = async (branches: string[]) => {
     try {
       const { data, error } = await supabase
         .from('students')
         .select('*')
-        .eq('trust_branch', branch)
+        .in('trust_branch', branches)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -137,12 +138,12 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
     }
   };
 
-  const fetchAttendanceLogs = async (branch: string) => {
+  const fetchAttendanceLogs = async (branches: string[]) => {
     try {
       const { data, error } = await supabase
         .from('attendance')
         .select('*, students!inner(full_name, trust_id, college_name, trust_branch)')
-        .eq('students.trust_branch', branch)
+        .in('students.trust_branch', branches)
         .gte('created_at', new Date().toISOString().split('T')[0])
         .order('created_at', { ascending: false });
 
@@ -153,12 +154,12 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
     }
   };
 
-  const fetchApplications = async (branch: string) => {
+  const fetchApplications = async (branches: string[]) => {
     try {
       const { data, error } = await supabase
         .from('applications')
         .select('*')
-        .eq('trust_branch', branch)
+        .in('trust_branch', branches)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -228,7 +229,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
           <img src={PSS_LOGO} alt="PSS Logo" className="w-10 h-10 rounded-full" referrerPolicy="no-referrer" />
           <div>
             <h1 className="text-lg font-bold text-slate-800 leading-tight">PSS Incharge Dashboard</h1>
-            <p className="text-xs font-medium text-slate-500">{inchargeBranch} Branch Portal</p>
+            <p className="text-xs font-medium text-slate-500">{inchargeBranches.join(', ')} Branch Portal</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

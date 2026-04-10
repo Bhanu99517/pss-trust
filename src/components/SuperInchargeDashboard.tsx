@@ -76,17 +76,43 @@ export default function SuperInchargeDashboard({ onLogout, onChangePassword }: S
   const [approvalComment, setApprovalComment] = useState('');
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [assignedBranches, setAssignedBranches] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchData();
+    fetchInitialData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchInitialData = async () => {
+    setIsLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      let branches: string[] = [];
+      if (user) {
+        const { data: inchargeData } = await supabase
+          .from('incharges')
+          .select('branch')
+          .eq('id', user.id)
+          .single();
+        
+        if (inchargeData?.branch) {
+          branches = inchargeData.branch.split(',').map((b: string) => b.trim());
+          setAssignedBranches(branches);
+        }
+      }
+      await fetchData(branches);
+    } catch (error) {
+      console.error('Error fetching initial data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchData = async (branches: string[]) => {
     setIsLoading(true);
     try {
       await Promise.all([
-        fetchStudents(),
-        fetchApplications()
+        fetchStudents(branches),
+        fetchApplications(branches)
       ]);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -95,12 +121,17 @@ export default function SuperInchargeDashboard({ onLogout, onChangePassword }: S
     }
   };
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (branches: string[]) => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('students')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*');
+      
+      if (branches.length > 0) {
+        query = query.in('trust_branch', branches);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
       setStudentsList(data || []);
@@ -109,12 +140,17 @@ export default function SuperInchargeDashboard({ onLogout, onChangePassword }: S
     }
   };
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (branches: string[]) => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('applications')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*');
+      
+      if (branches.length > 0) {
+        query = query.in('trust_branch', branches);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
       setApplications(data || []);
@@ -160,14 +196,18 @@ export default function SuperInchargeDashboard({ onLogout, onChangePassword }: S
       s.trust_id.toLowerCase().includes(searchLower) ||
       s.college_name.toLowerCase().includes(searchLower);
     
-    const matchesBranch = branchFilter === 'All' || s.trust_branch === branchFilter;
+    const matchesBranch = branchFilter === 'All' 
+      ? (assignedBranches.length > 0 ? assignedBranches.includes(s.trust_branch || '') : true)
+      : s.trust_branch === branchFilter;
     return matchesSearch && matchesBranch;
   });
 
   const filteredApps = applications.filter(app => {
     const matchesSearch = app.full_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           app.student_id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesBranch = branchFilter === 'All' || app.trust_branch === branchFilter;
+    const matchesBranch = branchFilter === 'All'
+      ? (assignedBranches.length > 0 ? assignedBranches.includes(app.trust_branch || '') : true)
+      : app.trust_branch === branchFilter;
     // Super incharge only sees apps that have passed branch incharge
     const isVisible = app.status !== 'pending_branch';
     return matchesSearch && matchesBranch && isVisible;
@@ -287,8 +327,8 @@ export default function SuperInchargeDashboard({ onLogout, onChangePassword }: S
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
           >
-            <option value="All">All Branches</option>
-            {['BHEL', 'Bollaram', 'MYP', 'MKR', 'ECIL'].map(b => (
+            <option value="All">All My Branches</option>
+            {(assignedBranches.length > 0 ? assignedBranches : ['BHEL', 'Bollaram', 'MYP', 'MKR', 'ECIL']).map(b => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>

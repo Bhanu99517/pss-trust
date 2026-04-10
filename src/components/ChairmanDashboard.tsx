@@ -101,7 +101,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showAddIncharge, setShowAddIncharge] = useState(false);
-  const [newIncharge, setNewIncharge] = useState({ email: '', fullName: '', branch: '', role: 'branch_incharge', password: '' });
+  const [newIncharge, setNewIncharge] = useState({ email: '', fullName: '', branches: [] as string[], role: 'branch_incharge', password: '' });
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [isFixing, setIsFixing] = useState(false);
   const [approvalComment, setApprovalComment] = useState('');
@@ -137,6 +137,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...newIncharge,
+          branch: newIncharge.branches.join(', '),
           role: newIncharge.role || 'branch_incharge'
         }),
       });
@@ -146,7 +147,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
 
       alert('Incharge account created successfully!');
       setShowAddIncharge(false);
-      setNewIncharge({ email: '', fullName: '', branch: '', role: 'branch_incharge', password: '' });
+      setNewIncharge({ email: '', fullName: '', branches: [], role: 'branch_incharge', password: '' });
       fetchIncharges();
     } catch (error: any) {
       console.error('Add incharge error:', error);
@@ -817,9 +818,13 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                           </span>
                         </td>
                         <td className="px-6 py-6">
-                          <span className="px-3 py-1 bg-slate-100 rounded-full text-xs font-bold text-slate-600">
-                            {incharge.branch}
-                          </span>
+                          <div className="flex flex-wrap gap-1">
+                            {incharge.branch?.split(',').map((b: string) => (
+                              <span key={b} className="px-2 py-0.5 bg-slate-100 rounded-full text-[10px] font-bold text-slate-600 whitespace-nowrap">
+                                {b.trim()}
+                              </span>
+                            ))}
+                          </div>
                         </td>
                         <td className="px-6 py-6 text-sm text-slate-500">
                           {new Date(incharge.created_at).toLocaleDateString()}
@@ -888,35 +893,61 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                     onChange={(e) => setNewIncharge({...newIncharge, email: e.target.value})}
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-400 uppercase">Role</label>
                     <select 
                       required
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
                       value={newIncharge.role}
-                      onChange={(e) => setNewIncharge({...newIncharge, role: e.target.value})}
+                      onChange={(e) => setNewIncharge({...newIncharge, role: e.target.value, branches: []})}
                     >
                       <option value="branch_incharge">Branch Incharge</option>
                       <option value="super_incharge">Super Incharge</option>
                     </select>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-400 uppercase">Branch (For Branch Incharge)</label>
-                    <select 
-                      required={newIncharge.role === 'branch_incharge'}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
-                      value={newIncharge.branch}
-                      onChange={(e) => setNewIncharge({...newIncharge, branch: e.target.value})}
-                    >
-                      <option value="">Select Branch</option>
-                      <option value="BHEL">BHEL</option>
-                      <option value="Bollaram">Bollaram</option>
-                      <option value="MYP">MYP</option>
-                      <option value="MKR">MKR</option>
-                      <option value="ECIL">ECIL</option>
-                    </select>
-                  </div>
+
+                  {newIncharge.role === 'branch_incharge' ? (
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Branch</label>
+                      <select 
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
+                        value={newIncharge.branches[0] || ''}
+                        onChange={(e) => setNewIncharge({...newIncharge, branches: [e.target.value]})}
+                      >
+                        <option value="">Select Branch</option>
+                        {['BHEL', 'Bollaram', 'MYP', 'MKR', 'ECIL'].map(b => (
+                          <option key={b} value={b}>{b}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase block mb-2">Select Accessible Branches</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {['BHEL', 'Bollaram', 'MYP', 'MKR', 'ECIL'].map(b => (
+                          <label key={b} className="flex items-center gap-2 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-all">
+                            <input 
+                              type="checkbox"
+                              checked={newIncharge.branches.includes(b)}
+                              onChange={(e) => {
+                                const branches = e.target.checked 
+                                  ? [...newIncharge.branches, b]
+                                  : newIncharge.branches.filter(item => item !== b);
+                                setNewIncharge({...newIncharge, branches});
+                              }}
+                              className="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                            />
+                            <span className="text-sm font-medium text-slate-700">{b}</span>
+                          </label>
+                        ))}
+                      </div>
+                      {newIncharge.branches.length === 0 && (
+                        <p className="text-[10px] text-red-500 font-bold">Please select at least one branch</p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase">Password</label>

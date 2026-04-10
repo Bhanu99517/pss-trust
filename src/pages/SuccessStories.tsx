@@ -17,6 +17,32 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
   {
+    name: "P Chamanthi ",
+    education: " IIIT Basara-ECE",
+    fatherProfession: "Father is a Daily wages worker",
+    joinedYear: "2007",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Pega Systems India",
+    designation: " Software Engineer 2",
+    package: "26 LPA",
+    siblings: " 1 Younger sister and 1 Elder sister",
+    maritalStatus: " Single",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
+  },
+  {
+    name: "AKULA MOUNIKA ",
+    education: "9th, 10th, Diploma & B.Tech",
+    fatherProfession: "Auto Driver",
+    joinedYear: "2006",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Pega Systems India",
+    designation: " Software Engineer 2",
+    package: "12 LPA",
+    siblings: "1 Younger Sister",
+    maritalStatus: " Married",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1ed7b5aa-b66f-44c3-9447-5e8bb875a2c9.png"
+  },
+   {
     name: "Ala Sravanthi",
     education: "B.Tech CBIT - ECE",
     fatherProfession: "Father is a  Tailor",
@@ -27,9 +53,9 @@ const stories = [
     package: " 20 LPA",
     siblings: " 1 Elder brother physically handicapped",
     maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/b57e5e3a-6913-4c1b-84f2-71cdd2b6d582.jpg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8b530164-279c-4a82-b164-6ddfa02bcb1b.png"
   },
-  {
+   {
     name: "Ganna Swathi",
     education: "B.Tech CVSR - CIVIL",
     fatherProfession: "Deceased father was a daily wage worker",
@@ -40,7 +66,7 @@ const stories = [
     package: " 10 LPA",
     siblings: " 1 Elder brother",
     maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/9776d871-24c9-477e-aa8e-55c04ea6b8d4.jpg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a026f84a-864a-4f5d-b23e-dee845a5d9f0.png"
   },
   {
     name: "M. Swapna",
@@ -53,7 +79,20 @@ const stories = [
     package: "10 LPA",
     siblings: "1 Elder brother",
     maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/7a0d93cf-5ae7-4d6a-bf3c-211359def5ec.jpg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e31b1d5a-3acd-475d-a42c-1e55ed1c047b.png"
+  },
+  {
+    name: "MUDHIGUNDA SANGEETHA",
+    education: "9th, 10th, Diploma & B.Tech",
+    fatherProfession: "Daily Wage Worker",
+    joinedYear: "2005",
+    studied: "High School and B.Tech",
+    company: " @ TCS",
+    designation: " UI DEVELOPER",
+    package: "13 LPA",
+    siblings: "1 Elder Brother & Younger Sister",
+    maritalStatus: "Married",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/55a4a666-2981-4bdc-8737-e5a5b966b211.png"
   },
   {
     name: "Sharanamma",
@@ -65,21 +104,8 @@ const stories = [
     package: " 6 LPA",
     siblings: "  1 Younger brother",
     maritalStatus: " Married, Husband working in private company",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e06ee21f-20cb-4d33-b854-4a28db1058c7.jpg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
   },
-  {
-    name: "P Chamanthi ",
-    education: " IIIT Basara-ECE",
-    fatherProfession: "Father is a Daily wages worker",
-    joinedYear: "2007",
-    studied: "10th, Intermediate, and B.Tech",
-    company: "Pega Systems India",
-    designation: " Software Engineer 2",
-    package: "12 LPA",
-    siblings: " 1 Younger sister and 1 Elder sister",
-    maritalStatus: " Single",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
-  }
 ];
 
 export default function SuccessStories() {

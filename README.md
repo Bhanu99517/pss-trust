@@ -4,7 +4,7 @@
 # 🎓 PSS Trust — Student Management Portal
 
 ### POTUKUCHI SOMASUNDARA SOCIAL WELFARE AND CHARITABLE TRUST
-**Established on. August 15, 2003**
+**Reg No: 95/2003 · Est. August 15, 2003**
 
 *Digitizing welfare for students from Below Poverty Line families*
 
@@ -16,7 +16,10 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-38BDF8?logo=tailwindcss&logoColor=white)
 ![Deployed on Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?logo=vercel&logoColor=white)
+![CI](https://github.com/Bhanu99517/pss-trust--5-/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-green)
+
+**[🌐 Live Demo](https://pss-trust-5.vercel.app)** · **[🐛 Report Bug](https://github.com/Bhanu99517/pss-trust--5-/issues/new?template=bug_report.md)** · **[✨ Request Feature](https://github.com/Bhanu99517/pss-trust--5-/issues/new?template=feature_request.md)**
 
 </div>
 
@@ -35,13 +38,15 @@
 | Feature | Description |
 |---|---|
 | 🧑‍🎓 **Student Registration** | Full signup with SSC details, course info (Diploma / B.Tech), and branch selection |
-| 🤖 **Face Recognition Attendance** | Register your face once, mark attendance daily using `face-api.js` |
+| 🤖 **Face Recognition Attendance** | Register your face once, mark attendance daily using `face-api.js` with real-time detection |
 | 📄 **Fee Application System** | Submit fee requests with academic records and document uploads |
 | 🏛️ **Chairman Dashboard** | Approve/reject applications, view attendance logs, manage all students |
 | 🔍 **Application Status Tracker** | Students can check their fee application status in real time |
 | 📊 **Attendance Reports** | View personal attendance history with dates and methods |
 | 📧 **Email Notifications** | Automated approval/rejection emails via Nodemailer (Gmail SMTP) |
-| 🔐 **Secure Auth** | Supabase Auth for both student and chairman roles |
+| 🔑 **OTP Security** | Two-step password change with OTP verification via email |
+| 🔒 **Secure Auth** | Supabase Auth for both student and chairman roles |
+| 🖼️ **Gallery & Success Stories** | Showcase trust events and student success stories |
 
 ---
 
@@ -55,11 +60,12 @@
 | **Database** | Supabase (PostgreSQL) |
 | **Auth** | Supabase Auth |
 | **Storage** | Supabase Storage (face photos, documents) |
-| **Face Recognition** | face-api.js |
+| **Face Recognition** | face-api.js (SSD MobileNet v1) |
 | **Email** | Nodemailer with Gmail SMTP |
 | **File Uploads** | Multer |
 | **Routing** | React Router DOM v7 |
 | **Icons** | Lucide React |
+| **CI/CD** | GitHub Actions |
 | **Deployment** | Vercel |
 
 ---
@@ -67,30 +73,46 @@
 ## 📁 Project Structure
 
 ```
-pss-trust/
+pss-trust--5-/
+├── .github/
+│   ├── workflows/
+│   │   └── ci.yml                  # GitHub Actions CI pipeline
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md           # Bug report template
+│   │   └── feature_request.md      # Feature request template
+│   └── pull_request_template.md    # PR checklist template
 ├── public/
-│   └── models/                   # face-api.js model weights (local)
+│   └── models/                     # face-api.js model weights (local)
 ├── src/
 │   ├── components/
-│   │   ├── Attendance.tsx         # Face verification & mark attendance
-│   │   ├── ChairmanDashboard.tsx  # Admin panel for approvals
-│   │   ├── ChairmanLogin.tsx      # Chairman authentication
-│   │   ├── ChangePassword.tsx     # Password update screen
-│   │   ├── CheckStatus.tsx        # Application status tracker
-│   │   ├── FaceRegistration.tsx   # Register face for attendance
-│   │   ├── FeeApplication.tsx     # Submit fee requests
-│   │   ├── Signup.tsx             # Student registration
-│   │   └── StudentAttendance.tsx  # Personal attendance report
-│   ├── App.tsx                    # Main app & routing logic
-│   ├── supabaseClient.ts          # Supabase client initialization
-│   ├── index.css                  # Global styles
-│   └── main.tsx                   # App entry point
-├── api/                           # Serverless API handlers (Vercel)
-├── server.ts                      # Express backend + Vite middleware
-├── reset_supabase.sql             # Full database schema
-├── supabase_setup.sql             # Additional migrations
-├── supabase-blueprint.json        # Supabase project blueprint
-├── .env.example                   # Environment variable template
+│   │   ├── Attendance.tsx          # Face verification & mark attendance
+│   │   ├── ChairmanDashboard.tsx   # Admin panel for approvals
+│   │   ├── ChairmanLogin.tsx       # Chairman authentication
+│   │   ├── ChangePassword.tsx      # OTP-based password update
+│   │   ├── CheckStatus.tsx         # Application status tracker
+│   │   ├── FaceRegistration.tsx    # Register face for attendance
+│   │   ├── FeeApplication.tsx      # Submit fee requests
+│   │   ├── Gallery.tsx             # Trust events gallery
+│   │   ├── Signup.tsx              # Student registration
+│   │   ├── StudentAttendance.tsx   # Personal attendance report
+│   │   └── SuccessStories.tsx      # Student success stories
+│   ├── App.tsx                     # Main app & routing logic
+│   ├── supabaseClient.ts           # Supabase client initialization
+│   ├── index.css                   # Global styles
+│   └── main.tsx                    # App entry point
+├── api/                            # Vercel serverless API functions
+├── server.ts                       # Express backend + Vite middleware
+├── reset_supabase.sql              # Full database schema
+├── supabase_setup.sql              # Additional migrations
+├── supabase-blueprint.json         # Supabase project blueprint
+├── eslint.config.js                # ESLint configuration
+├── .prettierrc                     # Prettier formatting rules
+├── .env.example                    # Environment variable template
+├── LICENSE                         # MIT License
+├── CONTRIBUTING.md                 # Contribution guidelines
+├── SECURITY.md                     # Security & vulnerability policy
+├── CHANGELOG.md                    # Version history
+├── CODE_OF_CONDUCT.md              # Community standards
 ├── vite.config.ts
 ├── tsconfig.json
 ├── vercel.json
@@ -106,7 +128,7 @@ pss-trust/
 | `students` | Student profiles with academic details and course info |
 | `attendance` | Daily attendance records with timestamps and method |
 | `attendance_faces` | Stored face descriptors for recognition (unique per student) |
-| `applications` | Fee application submissions with status tracking |
+| `applications` | Fee application submissions with approval status |
 
 ---
 
@@ -135,14 +157,11 @@ npm install
 
 ### 3. Configure environment variables
 
-Copy the example file and fill in your credentials:
-
 ```bash
 cp .env.example .env
 ```
 
 ```env
-# .env
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 
@@ -154,10 +173,10 @@ SMTP_PASS=your-gmail-app-password
 
 ### 4. Set up the database
 
-Open your **Supabase SQL Editor** and run the full schema:
+Open your **Supabase SQL Editor** and run:
 
 ```bash
-# Copy and paste the contents of reset_supabase.sql into Supabase SQL Editor
+# Copy and paste reset_supabase.sql into Supabase SQL Editor
 ```
 
 Then run these additional migrations:
@@ -192,11 +211,14 @@ Open [http://localhost:3000](http://localhost:3000) 🎉
 ## 📜 Scripts
 
 ```bash
-npm run dev       # Start dev server (Express + Vite)
-npm run build     # Build for production
-npm run preview   # Preview the production build locally
-npm run lint      # TypeScript type check (tsc --noEmit)
-npm run clean     # Remove the dist/ directory
+npm run dev            # Start dev server (Express + Vite)
+npm run build          # Build for production
+npm run preview        # Preview the production build locally
+npm run lint           # TypeScript type check (tsc --noEmit)
+npm run eslint         # Run ESLint on src/
+npm run format         # Format code with Prettier
+npm run format:check   # Check formatting without writing
+npm run clean          # Remove the dist/ directory
 ```
 
 ---
@@ -219,36 +241,46 @@ npm run clean     # Remove the dist/ directory
 This project is pre-configured for Vercel with `vercel.json`.
 
 ```bash
-# Install Vercel CLI
 npm install -g vercel
-
-# Deploy
 vercel
 ```
 
-> ⚠️ Make sure to add **all environment variables** in your Vercel project's **Settings → Environment Variables**.
+> ⚠️ Add all environment variables in **Vercel → Project Settings → Environment Variables**.
+
+Live at: **[https://pss-trust-5.vercel.app](https://pss-trust-5.vercel.app)**
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, bug reports, and feature requests are welcome!
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) first.
 
 1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature`
+2. Create your branch: `git checkout -b feature/your-feature`
+3. Commit: `git commit -m 'feat: add some feature'`
+4. Push: `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ---
 
-## 👤 Author
+## 🔐 Security
 
-**G Bhanu Prakash**
-Electronics & Communication Engineering
-Government Polytechnic College, Sangareddy
+If you discover a security vulnerability, please read our [Security Policy](SECURITY.md) and report it responsibly — **do not** open a public issue.
 
-[![GitHub](https://img.shields.io/badge/GitHub-Bhanu99517-181717?logo=github)](https://github.com/Bhanu99517)
+---
+
+## 👥 Contributors
+
+| Contributor | Role |
+|---|---|
+| **[G Bhanu Prakash](https://github.com/Bhanu99517)** | Creator & Maintainer |
+| **[Praveen7343](https://github.com/Praveen7343)** | Contributor — Gallery & Success Stories |
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 

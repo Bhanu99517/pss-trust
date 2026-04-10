@@ -55,6 +55,9 @@ interface FeeApplication {
   file_url: string;
   status: string;
   trust_branch?: string;
+  branch_incharge_comment?: string;
+  super_incharge_comment?: string;
+  chairman_comment?: string;
   created_at: string;
 }
 
@@ -74,6 +77,8 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [approvalComment, setApprovalComment] = useState('');
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
 
   const [inchargeBranch, setInchargeBranch] = useState<string | null>(null);
   const [isLoadingBranch, setIsLoadingBranch] = useState(true);
@@ -166,18 +171,25 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
   const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
     setIsUpdating(id);
     try {
-      // If incharge approves, it goes to chairman
-      const newStatus = status === 'approved' ? 'pending_chairman' : 'rejected';
+      // If incharge approves, it goes to super incharge
+      const newStatus = status === 'approved' ? 'pending_super' : 'rejected';
+      
+      const updateData: any = { status: newStatus };
+      if (status === 'approved') {
+        updateData.branch_incharge_comment = approvalComment;
+      }
       
       const { error } = await supabase
         .from('applications')
-        .update({ status: newStatus })
+        .update(updateData)
         .eq('id', id);
 
       if (error) throw error;
 
-      setApplications(prev => prev.map(app => app.id === id ? { ...app, status: newStatus } : app));
-      alert(status === 'approved' ? 'Application approved and forwarded to Chairman!' : 'Application rejected!');
+      setApplications(prev => prev.map(app => app.id === id ? { ...app, status: newStatus, branch_incharge_comment: approvalComment } : app));
+      alert(status === 'approved' ? 'Application approved and forwarded to Super Incharge!' : 'Application rejected!');
+      setShowApprovalModal(false);
+      setApprovalComment('');
     } catch (error: any) {
       console.error('Update status error:', error);
       alert('Error updating status: ' + error.message);
@@ -256,7 +268,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
             </div>
             <div>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending</p>
-              <p className="text-lg font-bold text-slate-900">{applications.filter(a => a.status === 'pending_incharge').length} Applications</p>
+              <p className="text-lg font-bold text-slate-900">{applications.filter(a => a.status === 'pending_branch').length} Applications</p>
             </div>
           </div>
 
@@ -266,7 +278,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
             </div>
             <div>
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Approved</p>
-              <p className="text-lg font-bold text-slate-900">{applications.filter(a => a.status === 'pending_chairman' || a.status === 'approved').length} Applications</p>
+              <p className="text-lg font-bold text-slate-900">{applications.filter(a => ['pending_super', 'pending_chairman', 'approved'].includes(a.status)).length} Applications</p>
             </div>
           </div>
 
@@ -441,12 +453,14 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                       </td>
                       <td className="px-6 py-6">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          app.status === 'pending_incharge' ? 'bg-orange-50 text-orange-600' : 
-                          app.status === 'pending_chairman' ? 'bg-blue-50 text-blue-600' :
+                          app.status === 'pending_branch' ? 'bg-orange-50 text-orange-600' : 
+                          app.status === 'pending_super' ? 'bg-blue-50 text-blue-600' :
+                          app.status === 'pending_chairman' ? 'bg-indigo-50 text-indigo-600' :
                           app.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 
                           'bg-red-50 text-red-600'
                         }`}>
-                          {app.status === 'pending_incharge' ? 'Pending Incharge' : 
+                          {app.status === 'pending_branch' ? 'Pending Branch' : 
+                           app.status === 'pending_super' ? 'Pending Super' : 
                            app.status === 'pending_chairman' ? 'Pending Chairman' : 
                            app.status}
                         </span>
@@ -460,10 +474,13 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                           >
                             <Eye className="w-5 h-5" />
                           </button>
-                          {app.status === 'pending_incharge' && (
+                          {app.status === 'pending_branch' && (
                             <>
                               <button 
-                                onClick={() => handleUpdateStatus(app.id, 'approved')}
+                                onClick={() => {
+                                  setSelectedApp(app);
+                                  setShowApprovalModal(true);
+                                }}
                                 disabled={isUpdating === app.id}
                                 className="p-2 text-slate-400 hover:text-emerald-600 transition-colors disabled:opacity-50"
                                 title="Approve"
@@ -646,7 +663,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                 )}
               </div>
 
-              {selectedApp.status === 'pending_incharge' && (
+              {selectedApp.status === 'pending_branch' && (
                 <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
                   <button 
                     onClick={() => {
@@ -659,8 +676,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                   </button>
                   <button 
                     onClick={() => {
-                      handleUpdateStatus(selectedApp.id, 'approved');
-                      setSelectedApp(null);
+                      setShowApprovalModal(true);
                     }}
                     className="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
                   >
@@ -668,6 +684,52 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                   </button>
                 </div>
               )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Approval Comment Modal */}
+      <AnimatePresence>
+        {showApprovalModal && selectedApp && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowApprovalModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8"
+            >
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Approval Comment</h3>
+              <p className="text-sm text-slate-500 mb-4">Add a comment for the Super Incharge (Optional):</p>
+              <textarea 
+                value={approvalComment}
+                onChange={(e) => setApprovalComment(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all resize-none mb-6"
+                rows={4}
+                placeholder="Enter your comment here..."
+              />
+              <div className="flex gap-4">
+                <button 
+                  onClick={() => setShowApprovalModal(false)}
+                  className="flex-1 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => handleUpdateStatus(selectedApp.id, 'approved')}
+                  disabled={isUpdating === selectedApp.id}
+                  className="flex-1 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 flex items-center justify-center"
+                >
+                  {isUpdating === selectedApp.id ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm Approval'}
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

@@ -152,7 +152,7 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
           academic_year: formData.academicYear,
           contribution: formData.contribution,
           file_url: publicUrl,
-          status: 'pending_incharge',
+          status: 'pending_branch',
           trust_branch: formData.trustBranch,
           academic_records: academicRecords,
           phone_no: formData.phoneNo,
@@ -354,15 +354,19 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Requesting For</label>
-                    <input 
+                    <select 
                       required
-                      type="text" 
                       name="requestingFor"
                       value={formData.requestingFor}
                       onChange={handleInputChange}
-                      placeholder="e.g., Fifth Sem Fee / Provisions / Others"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
-                    />
+                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all font-medium"
+                    >
+                      <option value="">Select Request Type</option>
+                      <option value="Semester Fee">Semester Fee</option>
+                      <option value="Bus Pass">Bus Pass</option>
+                      <option value="Provisions">Provisions</option>
+                      <option value="Others">Others</option>
+                    </select>
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Full Name</label>

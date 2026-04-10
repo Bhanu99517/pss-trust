@@ -36,6 +36,7 @@ import Attendance from './components/Attendance';
 import AdminLogin from './components/AdminLogin';
 import AdminOtp from './components/AdminOtp';
 import ChairmanDashboard from './components/ChairmanDashboard';
+import SuperInchargeDashboard from './components/SuperInchargeDashboard';
 import InchargeDashboard from './components/InchargeDashboard';
 import FeeApplication from './components/FeeApplication';
 import CheckStatus from './components/CheckStatus';
@@ -333,6 +334,7 @@ function AppContent() {
   });
   const [students, setStudents] = useState<any[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const chairmanEmail = CHAIRMAN_EMAIL;
   const navigate = useNavigate();
@@ -349,16 +351,50 @@ function AppContent() {
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      setIsLoading(false);
+      if (session?.user) {
+        fetchUserRole(session.user.email!);
+      } else {
+        setIsLoading(false);
+      }
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchUserRole(session.user.email!);
+      } else {
+        setUserRole(null);
+        setIsLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserRole = async (email: string) => {
+    if (email === chairmanEmail) {
+      setUserRole('chairman');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('incharges')
+        .select('role')
+        .eq('email', email)
+        .single();
+
+      if (error) throw error;
+      setUserRole(data?.role || 'branch_incharge');
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+      setUserRole('branch_incharge');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -436,7 +472,11 @@ function AppContent() {
             <div className="p-20 text-center">
               <p className="mb-4 text-slate-600">You are already logged in.</p>
               <button 
-                onClick={() => navigate(user.email === chairmanEmail ? '/chairman-dashboard' : '/incharge-dashboard')}
+                onClick={() => {
+                  if (userRole === 'chairman') navigate('/chairman-dashboard');
+                  else if (userRole === 'super_incharge') navigate('/super-incharge-dashboard');
+                  else navigate('/incharge-dashboard');
+                }}
                 className="px-6 py-2 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all"
               >
                 Go to Dashboard
@@ -458,7 +498,7 @@ function AppContent() {
         <Route path="/incharge-otp" element={<Navigate to="/admin-login" replace />} />
         
         <Route path="/chairman-dashboard" element={
-          user && user.email === chairmanEmail ? (
+          user && userRole === 'chairman' ? (
             <ChairmanDashboard 
               students={students} 
               onLogout={async () => {
@@ -475,8 +515,25 @@ function AppContent() {
           )
         } />
 
+        <Route path="/super-incharge-dashboard" element={
+          user && userRole === 'super_incharge' ? (
+            <SuperInchargeDashboard 
+              onLogout={async () => {
+                await supabase.auth.signOut();
+                navigate('/');
+              }} 
+              onChangePassword={() => navigate('/change-password')}
+            />
+          ) : (
+            <div className="p-20 text-center">
+              <p className="mb-4 text-slate-600">Access denied. Please login as Super Incharge.</p>
+              <Link to="/admin-login" className="text-slate-900 font-bold hover:underline">Admin Login</Link>
+            </div>
+          )
+        } />
+
         <Route path="/incharge-dashboard" element={
-          user && user.email !== chairmanEmail ? (
+          user && userRole === 'branch_incharge' ? (
             <InchargeDashboard 
               onLogout={async () => {
                 await supabase.auth.signOut();

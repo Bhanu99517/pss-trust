@@ -24,7 +24,8 @@ import {
   Settings,
   User,
   GraduationCap,
-  School
+  School,
+  MessageSquare
 } from 'lucide-react';
 
 const PSS_LOGO = "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/a84f56a0-4104-45b1-8c19-e9d129a3f77f.jpg";
@@ -74,6 +75,9 @@ interface FeeApplication {
   file_url: string;
   status: string;
   trust_branch?: string;
+  branch_incharge_comment?: string;
+  super_incharge_comment?: string;
+  chairman_comment?: string;
   created_at: string;
 }
 
@@ -97,9 +101,11 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showAddIncharge, setShowAddIncharge] = useState(false);
-  const [newIncharge, setNewIncharge] = useState({ email: '', fullName: '', branch: '', password: '' });
+  const [newIncharge, setNewIncharge] = useState({ email: '', fullName: '', branch: '', role: 'branch_incharge', password: '' });
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [isFixing, setIsFixing] = useState(false);
+  const [approvalComment, setApprovalComment] = useState('');
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -126,12 +132,13 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
     e.preventDefault();
     setIsUpdating('adding-incharge');
     try {
-      // 1. Create Auth User (This might fail if no service role key, but we'll try)
-      // Actually, we'll use a server endpoint for this to be safe
       const response = await fetch('/api/create-incharge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newIncharge),
+        body: JSON.stringify({
+          ...newIncharge,
+          role: newIncharge.role || 'branch_incharge'
+        }),
       });
 
       const data = await response.json();
@@ -139,7 +146,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
 
       alert('Incharge account created successfully!');
       setShowAddIncharge(false);
-      setNewIncharge({ email: '', fullName: '', branch: '', password: '' });
+      setNewIncharge({ email: '', fullName: '', branch: '', role: 'branch_incharge', password: '' });
       fetchIncharges();
     } catch (error: any) {
       console.error('Add incharge error:', error);
@@ -243,15 +250,22 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
   const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
     setIsUpdating(id);
     try {
+      const updateData: any = { status };
+      if (status === 'approved') {
+        updateData.chairman_comment = approvalComment;
+      }
+
       const { error } = await supabase
         .from('applications')
-        .update({ status })
+        .update(updateData)
         .eq('id', id);
 
       if (error) throw error;
 
-      setApplications(prev => prev.map(app => app.id === id ? { ...app, status } : app));
+      setApplications(prev => prev.map(app => app.id === id ? { ...app, status, chairman_comment: approvalComment } : app));
       alert(`Application ${status}!`);
+      setShowApprovalModal(false);
+      setApprovalComment('');
     } catch (error: any) {
       console.error('Update status error:', error);
       alert('Error updating status: ' + error.message);
@@ -350,7 +364,8 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                           app.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           (app.email && app.email.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesBranch = branchFilter === 'All' || app.trust_branch === branchFilter;
-    const isVisibleToChairman = app.status !== 'pending_incharge';
+    // Chairman only sees apps that have passed super incharge
+    const isVisibleToChairman = app.status !== 'pending_branch' && app.status !== 'pending_super';
     return matchesSearch && matchesBranch && isVisibleToChairman;
   });
 
@@ -695,7 +710,10 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                           {app.status === 'pending_chairman' && (
                             <>
                               <button 
-                                onClick={() => handleUpdateStatus(app.id, 'approved')}
+                                onClick={() => {
+                                  setSelectedApp(app);
+                                  setShowApprovalModal(true);
+                                }}
                                 disabled={isUpdating === app.id}
                                 className="p-2 text-slate-400 hover:text-emerald-600 transition-colors disabled:opacity-50"
                                 title="Approve"
@@ -773,6 +791,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                   <tr className="bg-slate-50 border-b border-slate-100">
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Role</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Branch</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Created At</th>
                     <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
@@ -790,6 +809,13 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                       <tr key={incharge.id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-6 font-bold text-slate-900">{incharge.full_name}</td>
                         <td className="px-6 py-6 text-slate-600">{incharge.email}</td>
+                        <td className="px-6 py-6">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                            incharge.role === 'super_incharge' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
+                          }`}>
+                            {incharge.role === 'super_incharge' ? 'Super Incharge' : 'Branch Incharge'}
+                          </span>
+                        </td>
                         <td className="px-6 py-6">
                           <span className="px-3 py-1 bg-slate-100 rounded-full text-xs font-bold text-slate-600">
                             {incharge.branch}
@@ -862,21 +888,35 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                     onChange={(e) => setNewIncharge({...newIncharge, email: e.target.value})}
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-400 uppercase">Branch</label>
-                  <select 
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
-                    value={newIncharge.branch}
-                    onChange={(e) => setNewIncharge({...newIncharge, branch: e.target.value})}
-                  >
-                    <option value="">Select Branch</option>
-                    <option value="BHEL">BHEL</option>
-                    <option value="Bollaram">Bollaram</option>
-                    <option value="MYP">MYP</option>
-                    <option value="MKR">MKR</option>
-                    <option value="ECIL">ECIL</option>
-                  </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Role</label>
+                    <select 
+                      required
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
+                      value={newIncharge.role}
+                      onChange={(e) => setNewIncharge({...newIncharge, role: e.target.value})}
+                    >
+                      <option value="branch_incharge">Branch Incharge</option>
+                      <option value="super_incharge">Super Incharge</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Branch (For Branch Incharge)</label>
+                    <select 
+                      required={newIncharge.role === 'branch_incharge'}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
+                      value={newIncharge.branch}
+                      onChange={(e) => setNewIncharge({...newIncharge, branch: e.target.value})}
+                    >
+                      <option value="">Select Branch</option>
+                      <option value="BHEL">BHEL</option>
+                      <option value="Bollaram">Bollaram</option>
+                      <option value="MYP">MYP</option>
+                      <option value="MKR">MKR</option>
+                      <option value="ECIL">ECIL</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-400 uppercase">Password</label>
@@ -934,6 +974,46 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</p>
+                    <p className="font-bold text-slate-900">{selectedApp.full_name}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">SID</p>
+                    <p className="font-bold text-slate-900">{selectedApp.student_id}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Branch</p>
+                    <p className="font-bold text-slate-900">{selectedApp.trust_branch}</p>
+                  </div>
+                </div>
+
+                {/* Comments Section */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-blue-600" />
+                    Approval History
+                  </h3>
+                  <div className="space-y-3">
+                    {selectedApp.branch_incharge_comment && (
+                      <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Branch Incharge Comment</p>
+                        <p className="text-sm text-slate-700 italic">"{selectedApp.branch_incharge_comment}"</p>
+                      </div>
+                    )}
+                    {selectedApp.super_incharge_comment && (
+                      <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Super Incharge Comment</p>
+                        <p className="text-sm text-slate-700 italic">"{selectedApp.super_incharge_comment}"</p>
+                      </div>
+                    )}
+                    {!selectedApp.branch_incharge_comment && !selectedApp.super_incharge_comment && (
+                      <p className="text-xs text-slate-400 italic">No comments from incharges.</p>
+                    )}
+                  </div>
+                </div>
+
                 {/* Request Form Section */}
                 <div className="space-y-6">
                   <div className="flex items-center gap-2 text-slate-400">
@@ -1033,16 +1113,59 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                     Reject Application
                   </button>
                   <button 
-                    onClick={() => {
-                      handleUpdateStatus(selectedApp.id, 'approved');
-                      setSelectedApp(null);
-                    }}
+                    onClick={() => setShowApprovalModal(true)}
                     className="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
                   >
                     Accept & Notify Student
                   </button>
                 </div>
               )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Approval Comment Modal */}
+      <AnimatePresence>
+        {showApprovalModal && selectedApp && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowApprovalModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8"
+            >
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Final Approval Comment</h3>
+              <p className="text-sm text-slate-500 mb-4">Add a final comment (Optional):</p>
+              <textarea 
+                value={approvalComment}
+                onChange={(e) => setApprovalComment(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all resize-none mb-6"
+                rows={4}
+                placeholder="Enter your comment here..."
+              />
+              <div className="flex gap-4">
+                <button 
+                  onClick={() => setShowApprovalModal(false)}
+                  className="flex-1 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => handleUpdateStatus(selectedApp.id, 'approved')}
+                  disabled={isUpdating === selectedApp.id}
+                  className="flex-1 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 flex items-center justify-center"
+                >
+                  {isUpdating === selectedApp.id ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm Approval'}
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

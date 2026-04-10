@@ -61,11 +61,22 @@ export default function AdminOtp() {
         }
 
         // Success! Global auth state will update and App.tsx will allow dashboard access
-        // Redirect based on email
+        // Redirect based on email and role
         if (email === CHAIRMAN_EMAIL) {
           navigate('/chairman-dashboard');
         } else {
-          navigate('/incharge-dashboard');
+          // Fetch role to redirect correctly
+          const { data: roleData } = await supabase
+            .from('incharges')
+            .select('role')
+            .eq('email', email)
+            .single();
+          
+          if (roleData?.role === 'super_incharge') {
+            navigate('/super-incharge-dashboard');
+          } else {
+            navigate('/incharge-dashboard');
+          }
         }
       } else {
         setError(data.error || 'Invalid OTP. Please try again.');

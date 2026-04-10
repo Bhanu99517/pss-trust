@@ -120,7 +120,8 @@ export default function CheckStatus({ onBack }: CheckStatusProps) {
                         application.status === 'approved' ? 'bg-emerald-100 text-emerald-600' : 
                         'bg-red-100 text-red-600'
                       }`}>
-                        {application.status === 'pending_incharge' ? 'Pending Incharge' : 
+                        {application.status === 'pending_branch' ? 'Pending Branch' : 
+                         application.status === 'pending_super' ? 'Pending Super Incharge' : 
                          application.status === 'pending_chairman' ? 'Pending Chairman' : 
                          application.status}
                       </span>
@@ -145,14 +146,16 @@ export default function CheckStatus({ onBack }: CheckStatusProps) {
                       
                       <div>
                         <h4 className="font-bold text-slate-900">
-                          {application.status === 'pending_incharge' ? 'Review by Incharge' : 
+                          {application.status === 'pending_branch' ? 'Review by Branch Incharge' : 
+                           application.status === 'pending_super' ? 'Review by Super Incharge' :
                            application.status === 'pending_chairman' ? 'Review by Chairman' :
                            application.status === 'approved' ? 'Application Approved!' : 
                            'Application Rejected'}
                         </h4>
                         <p className="text-xs text-slate-500 mt-1">
-                          {application.status === 'pending_incharge' ? 'Your branch incharge is currently reviewing your application.' : 
-                           application.status === 'pending_chairman' ? 'Your application has been approved by the incharge and is now with the Chairman.' :
+                          {application.status === 'pending_branch' ? 'Your branch incharge is currently reviewing your application.' : 
+                           application.status === 'pending_super' ? 'Your application has been approved by the branch incharge and is now with the Super Incharge.' :
+                           application.status === 'pending_chairman' ? 'Your application has been approved by the Super Incharge and is now with the Chairman.' :
                            application.status === 'approved' ? 'Your application has been approved by the Chairman. You can now proceed.' : 
                            'Unfortunately, your application was not approved at this time.'}
                         </p>

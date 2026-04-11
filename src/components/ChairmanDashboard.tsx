@@ -55,7 +55,7 @@ interface Student {
   btech_college?: string;
   btech_year?: string;
   btech_branch?: string;
-  university_name?: string;
+  btech_pin?: string;
   status?: string;
   photo_url?: string;
   created_at?: string;
@@ -382,7 +382,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
           btech_college: editingStudent.btech_college,
           btech_year: editingStudent.btech_year,
           btech_branch: editingStudent.btech_branch,
-          university_name: editingStudent.university_name,
+          btech_pin: editingStudent.btech_pin,
           status: editingStudent.status
         })
         .eq('id', editingStudent.id);
@@ -1576,8 +1576,8 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                           <p className="text-[10px] text-purple-400 font-bold uppercase mb-2">B.Tech Info</p>
                           <p className="text-sm font-bold text-purple-900">{selectedStudent.btech_college}</p>
                           <p className="text-xs text-purple-600">{selectedStudent.btech_branch} - {selectedStudent.btech_year} Year</p>
-                          {selectedStudent.university_name && (
-                            <p className="text-[10px] text-purple-400 mt-1">{selectedStudent.university_name}</p>
+                          {selectedStudent.btech_pin && (
+                            <p className="text-[10px] text-purple-400 mt-1">PIN: {selectedStudent.btech_pin}</p>
                           )}
                         </div>
                       )}
@@ -1929,8 +1929,8 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                         <input 
                           type="text"
                           className="w-full px-4 py-3 rounded-xl border border-purple-200 focus:border-purple-900 outline-none transition-all font-medium"
-                          value={editingStudent.university_name || ''}
-                          onChange={(e) => setEditingStudent({...editingStudent, university_name: e.target.value})}
+                          value={editingStudent.btech_pin || ''}
+                          onChange={(e) => setEditingStudent({...editingStudent, btech_pin: e.target.value})}
                         />
                       </div>
                     </div>

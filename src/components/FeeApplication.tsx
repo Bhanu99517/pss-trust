@@ -77,13 +77,13 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
        // Pre-fill branch from student record
       setFormData(prev => ({
         ...prev,
-        trustBranch: student.trust_branch || '',
+        trustBranch: student.trust_branch,
         sid: student.trust_id,
         fullName: student.full_name,
         pinNo: student.pin_number, // Not in schema yet
         collegeName: student.college_name,
-        phoneNo: student.mobile_number || '',
-        email: student.email || '',
+        phoneNo: student.mobile_number,
+        email: student.email,
         trustAttendance: student.trust_attendance,
       }));
       setIsVerified(true);
@@ -319,7 +319,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                       required
                       name="trustBranch"
                       value={formData.trustBranch}
-                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all font-medium"
                     >
                       <option value="">Select Branch</option>
@@ -367,8 +366,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                       <option value="">Select Request Type</option>
                       <option value="Semester Fee">Semester Fee</option>
                       <option value="Bus Pass">Bus Pass</option>
-                      <option value="Provisions">Provisions</option>
-                      <option value="Others">Others</option>
                     </select>
                   </div>
                   <div>
@@ -398,7 +395,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                       type="text" 
                       name="collegeName"
                       value={formData.collegeName}
-                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
                     />
                   </div>

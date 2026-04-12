@@ -25,8 +25,10 @@ import {
   User,
   GraduationCap,
   School,
-  MessageSquare
+  MessageSquare,
+  Camera
 } from 'lucide-react';
+import FaceRegistration from './FaceRegistration';
 
 const PSS_LOGO = "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/a84f56a0-4104-45b1-8c19-e9d129a3f77f.jpg";
 
@@ -122,6 +124,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
   const [isFixing, setIsFixing] = useState(false);
   const [approvalComment, setApprovalComment] = useState('');
   const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [showRecapture, setShowRecapture] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -1753,10 +1756,20 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
               <form onSubmit={handleUpdateStudent} className="flex-1 overflow-y-auto p-8 space-y-8">
                 {/* Personal Details */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <User className="w-4 h-4 text-blue-500" />
-                    Personal Details
-                  </h3>
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                      <User className="w-4 h-4 text-blue-500" />
+                      Personal Details
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowRecapture(true)}
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 transition-all text-xs font-bold"
+                    >
+                      <Camera className="w-4 h-4" />
+                      Recapture Face
+                    </button>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase">Full Name</label>
@@ -2045,6 +2058,39 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                 </div>
               </form>
             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Face Recapture Modal */}
+      <AnimatePresence>
+        {showRecapture && editingStudent && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowRecapture(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <div className="relative w-full max-w-md">
+              <button 
+                onClick={() => setShowRecapture(false)}
+                className="absolute -top-12 right-0 p-2 text-white hover:text-slate-200 transition-colors z-10"
+              >
+                <CloseIcon className="w-8 h-8" />
+              </button>
+              <FaceRegistration 
+                studentId={editingStudent.id}
+                onSuccess={() => {
+                  setShowRecapture(false);
+                  fetchStudents(); // Refresh data to get new photo_url
+                }}
+                title="Recapture Face"
+                subtitle="Update student's biometric data"
+                className="bg-transparent p-0 flex items-center justify-center"
+              />
+            </div>
           </div>
         )}
       </AnimatePresence>

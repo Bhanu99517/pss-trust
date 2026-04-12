@@ -6,11 +6,20 @@ import { supabase } from '../supabaseClient';
 interface FaceRegistrationProps {
   studentId: string;
   onSuccess: () => void;
+  title?: string;
+  subtitle?: string;
+  className?: string;
 }
 
 const MODEL_URL = '/models';
 
-export default function FaceRegistration({ studentId, onSuccess }: FaceRegistrationProps) {
+export default function FaceRegistration({ 
+  studentId, 
+  onSuccess, 
+  title = "Face Registration",
+  subtitle = "Secure your account with face recognition",
+  className = "min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6"
+}: FaceRegistrationProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const faceapiRef = useRef<any>(null);
   const [isModelsLoaded, setIsModelsLoaded] = useState(false);
@@ -158,11 +167,11 @@ export default function FaceRegistration({ studentId, onSuccess }: FaceRegistrat
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6">
+    <div className={className}>
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
         className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center">
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Face Registration</h2>
-        <p className="text-slate-500 mb-8">Secure your account with face recognition</p>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2">{title}</h2>
+        <p className="text-slate-500 mb-8">{subtitle}</p>
 
         <div className="relative w-64 h-64 mx-auto mb-8">
           <div className={`w-full h-full rounded-full overflow-hidden border-4 transition-colors duration-300 ${faceDetected ? 'border-emerald-500' : 'border-red-500'}`}>

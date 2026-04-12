@@ -576,40 +576,40 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-slate-200">
+        <div className="flex border-b border-slate-200 overflow-x-auto scrollbar-hide">
           <button 
             onClick={() => { setActiveTab('students'); setBranchFilter('All'); setFilter('All'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'students' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'students' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Students ({studentsList.length})
           </button>
           <button 
             onClick={() => { setActiveTab('applications'); setBranchFilter('All'); setFilter('All'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'applications' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'applications' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Fee Applications ({applications.length})
           </button>
           <button 
             onClick={() => { setActiveTab('attendance'); setBranchFilter('All'); setFilter('All'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'attendance' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'attendance' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Today's Attendance ({attendanceLogs.length})
           </button>
           <button 
             onClick={() => { setActiveTab('incharges'); setBranchFilter('All'); setFilter('All'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'incharges' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'incharges' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Manage Incharges ({incharges.length})
           </button>
           <button 
             onClick={() => { setActiveTab('notices'); setBranchFilter('All'); setFilter('All'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'notices' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'notices' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Notices ({notices.length})
           </button>
           <button 
             onClick={() => { setActiveTab('signup-code'); }}
-            className={`px-8 py-4 text-sm font-bold transition-all ${activeTab === 'signup-code' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`px-8 py-4 text-sm font-bold transition-all whitespace-nowrap ${activeTab === 'signup-code' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
           >
             Signup Code
           </button>

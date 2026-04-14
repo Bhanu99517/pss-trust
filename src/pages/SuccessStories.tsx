@@ -4,6 +4,7 @@ import { Quote, GraduationCap, Briefcase, Award, ChevronLeft, ChevronRight } fro
 
 const stories = [
   {
+    // 1
     name: "Akula Kalyani",
     education: "JNTUH Campus-ECE",
     fatherProfession: "Security guard",
@@ -17,6 +18,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
   {
+    // 2
     name: "AKULA MOUNIKA ",
     education: "9th, 10th, Diploma & B.Tech",
     fatherProfession: "Auto Driver",
@@ -30,6 +32,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1ed7b5aa-b66f-44c3-9447-5e8bb875a2c9.png"
   },
   {
+    // 3
     name: "Ala Sravanthi",
     education: "B.Tech CBIT - ECE",
     fatherProfession: "Father is a  Tailor",
@@ -43,6 +46,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8b530164-279c-4a82-b164-6ddfa02bcb1b.png"
   },
   {
+    // 4
     name: "Ganna Swathi",
     education: "B.Tech CVSR - CIVIL",
     fatherProfession: "Deceased father was a daily wage worker",
@@ -56,6 +60,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a026f84a-864a-4f5d-b23e-dee845a5d9f0.png"
   },
   {
+    // 5
     name: "M. Swapna",
     education: "B.Tech CBIT - ECE",
     fatherProfession: "Deceased Father was a Daily wages worker",
@@ -69,6 +74,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e31b1d5a-3acd-475d-a42c-1e55ed1c047b.png"
   },
   {
+    // 6
     name: "MUDHIGUNDA SANGEETHA",
     education: "9th, 10th, Diploma & B.Tech",
     fatherProfession: "Daily Wage Worker",
@@ -82,6 +88,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/55a4a666-2981-4bdc-8737-e5a5b966b211.png"
   },
   {
+    // 7
     name: "Sharanamma",
     education: "B.Tech DRK - ECE",
     fatherProfession: "Father' is a Daily wage worker",
@@ -94,6 +101,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
   },
   {
+    // 8
     name: "PUJARI NAGALAXMI",
     education: "Engineering at VNR VJIET (ECE) JNTU",
     fatherProfession: "Daily Wage Worker",
@@ -106,6 +114,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1c322a1f-0a20-46a5-b404-d94451f8274c.png"
   },
   {
+    // 9
     name: "DOLA KUMARI",
     education: "Engineering at GRIET (CIVIL) JNTU",
     fatherProfession: "Father' is a Daily wage worker",
@@ -118,6 +127,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/d021d2b9-df0d-4596-9121-c6e04b3a8e5a.png"
   },
   {
+    // 10
     name: "P Chamanthi ",
     education: " IIIT Basara-ECE",
     fatherProfession: "Father is a Daily wages worker",
@@ -131,6 +141,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8d9a38bc-c471-49b8-ab12-69df98b2efa2.png"
   },
   {
+    // 11
     name: "AKULA MOUNIKA",
     education: "CSE",
     fatherProfession: "Auto Driver",
@@ -143,6 +154,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/2b01a171-ab6e-4c90-b1e6-9df3f998795f.png"
   },
   {
+    // 12
     name: "MD BHASHEERA",
     education: "Engineering at SNIST (ECE) JNTU",
     fatherProfession: "Father' is a Daily wage worker",
@@ -155,6 +167,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a8590aec-6694-44da-84d6-ca90b19ac299.png"
   },
   {
+    // 13
     name: "ALETI CHANDRASHEKAR",
     education: "Engineering at CMR (ECE) JNTU",
     fatherProfession: "Auto Driver",
@@ -167,6 +180,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/5ad856bb-3b82-4871-9823-19f1455facd4.png"
   },
   {
+    // 14
     name: "KONDAPALLY SWATHI",
     education: "Engineering at CMR (ECE)JNTU",
     fatherProfession: "Father' is a Daily wage worker",
@@ -179,6 +193,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6d74a363-5220-40a8-b15c-bb4325b4944e.png"
   },
   {
+    // 15
     name: "CHINMAMITI VANI",
     education: "Bellevue College of Nursing",
     fatherProfession: "Father' is a Daily wage worker",
@@ -191,6 +206,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/841e6330-ae90-4993-b69a-60c93eb4079c.png"
   },
   {
+    // 16
     name: "DOLA PALGUNA",
     education: "Engineering at VNR VJIET (CIVIL) JNTUE",
     fatherProfession: "Father' is a Daily wage worker",
@@ -202,6 +218,19 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6387d99f-143f-49ac-b272-9fe31bc093c5.png"
   },
+  {
+    // 17
+    name: "DOLA PALGUNA",
+    education: "Engineering at VNR VJIET (CIVIL) JNTUE",
+    fatherProfession: "Father' is a Daily wage worker",
+    joinedYear: "2006",
+    studied: "10th, diploma , and B.Tech",
+    company: "QS @ AVS CONSTRUCTIONS",
+    package: " 7.6 LPA",
+    siblings: "1 Elder Sister",
+    maritalStatus: " Married",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6387d99f-143f-49ac-b272-9fe31bc093c5.png"
+  }
 ];
 
 const STORIES_PER_PAGE = 15;

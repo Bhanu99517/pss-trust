@@ -27,7 +27,7 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
     motherMobile: '',
     email: '',
     address: '',
-    trustBranch: '',
+    trustBranch: 'BHEL',
     // SSC Details
     sscSchool: '',
     sscBoard: 'SSC',

@@ -23,9 +23,11 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
     dob: '',
     gender: 'male',
     mobileNumber: '',
+    fatherMobile: '',
+    motherMobile: '',
     email: '',
     address: '',
-    trustBranch: 'BHEL',
+    trustBranch: '',
     // SSC Details
     sscSchool: '',
     sscBoard: 'SSC',
@@ -157,6 +159,8 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
           dob: formData.dob,
           gender: formData.gender,
           mobile_number: formData.mobileNumber,
+          father_mobile: formData.fatherMobile || null,
+          mother_mobile: formData.motherMobile || null,
           email: formData.email,
           address: formData.address,
           trust_branch: formData.trustBranch,
@@ -393,6 +397,36 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
                       value={formData.mobileNumber}
                       onChange={handleInputChange}
                       placeholder="student mobile number"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Father's Mobile Number</label>
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input 
+                      type="tel" 
+                      name="fatherMobile"
+                      value={formData.fatherMobile}
+                      onChange={handleInputChange}
+                      placeholder="Father's mobile number"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mother's Mobile Number</label>
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input 
+                      type="tel" 
+                      name="motherMobile"
+                      value={formData.motherMobile}
+                      onChange={handleInputChange}
+                      placeholder="Mother's mobile number"
                       className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
                     />
                   </div>

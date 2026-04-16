@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.psstrust.studentportal",
+      "sha256_cert_fingerprints": ["7D:E4:F4:90:08:A1:29:D4:18:3D:25:50:02:03:57:67:58:FB:79:62:B9:40:4C:18:B4:51:EC:60:1E:E4:37:C0"]
+    }
+  }
+]

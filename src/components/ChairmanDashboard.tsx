@@ -95,6 +95,9 @@ interface FeeApplication {
 interface Branch {
   id: string;
   name: string;
+  latitude?: number;
+  longitude?: number;
+  radius?: number;
   created_at: string;
 }
 
@@ -119,7 +122,8 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
   const [notices, setNotices] = useState<Notice[]>([]);
   const [branchesList, setBranchesList] = useState<Branch[]>([]);
   const [isAddingBranch, setIsAddingBranch] = useState(false);
-  const [newBranchName, setNewBranchName] = useState('');
+  const [editingBranch, setEditingBranch] = useState<Branch | null>(null);
+  const [newBranchData, setNewBranchData] = useState({ name: '', latitude: '', longitude: '', radius: '100' });
   const [selectedApp, setSelectedApp] = useState<FeeApplication | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -163,18 +167,23 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
 
   const handleAddBranch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newBranchName.trim()) return;
+    if (!newBranchData.name.trim()) return;
     setIsUpdating('adding-branch');
     try {
       const response = await fetch('/api/branches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newBranchName }),
+        body: JSON.stringify({ 
+          name: newBranchData.name,
+          latitude: newBranchData.latitude ? parseFloat(newBranchData.latitude) : null,
+          longitude: newBranchData.longitude ? parseFloat(newBranchData.longitude) : null,
+          radius: newBranchData.radius ? parseFloat(newBranchData.radius) : 100
+        }),
       });
       const data = await response.json();
       if (data.success) {
         setBranchesList(prev => [...prev, data.branch].sort((a, b) => a.name.localeCompare(b.name)));
-        setNewBranchName('');
+        setNewBranchData({ name: '', latitude: '', longitude: '', radius: '100' });
         setIsAddingBranch(false);
         alert('Branch added successfully!');
       } else {
@@ -182,6 +191,36 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
       }
     } catch (error: any) {
       alert('Error adding branch: ' + error.message);
+    } finally {
+      setIsUpdating(null);
+    }
+  };
+
+  const handleUpdateBranch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingBranch || !editingBranch.name.trim()) return;
+    setIsUpdating('updating-branch');
+    try {
+      const response = await fetch(`/api/branches/${editingBranch.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name: editingBranch.name,
+          latitude: editingBranch.latitude,
+          longitude: editingBranch.longitude,
+          radius: editingBranch.radius
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setBranchesList(prev => prev.map(b => b.id === data.branch.id ? data.branch : b));
+        setEditingBranch(null);
+        alert('Branch updated successfully!');
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error: any) {
+      alert('Error updating branch: ' + error.message);
     } finally {
       setIsUpdating(null);
     }
@@ -1187,13 +1226,22 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                             {new Date(branch.created_at).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-6 text-right">
-                            <button 
-                              onClick={() => handleDeleteBranch(branch.id, branch.name)}
-                              className="p-2 text-slate-400 hover:text-red-600 transition-colors"
-                              title="Delete Branch"
-                            >
-                              <Trash2 className="w-5 h-5" />
-                            </button>
+                            <div className="flex justify-end gap-2">
+                              <button 
+                                onClick={() => setEditingBranch(branch)}
+                                className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
+                                title="Edit Branch Geofence"
+                              >
+                                <Settings className="w-5 h-5" />
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteBranch(branch.id, branch.name)}
+                                className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                                title="Delete Branch"
+                              >
+                                <Trash2 className="w-5 h-5" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -2317,7 +2365,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8"
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-slate-900">Add New Branch</h3>
@@ -2335,8 +2383,44 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                     autoFocus
                     placeholder="e.g. Miyapur"
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all"
-                    value={newBranchName}
-                    onChange={(e) => setNewBranchName(e.target.value)}
+                    value={newBranchData.name}
+                    onChange={(e) => setNewBranchData({...newBranchData, name: e.target.value})}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Latitude</label>
+                    <input 
+                      type="number" 
+                      step="any"
+                      placeholder="17.1234"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                      value={newBranchData.latitude}
+                      onChange={(e) => setNewBranchData({...newBranchData, latitude: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Longitude</label>
+                    <input 
+                      type="number" 
+                      step="any"
+                      placeholder="78.5678"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                      value={newBranchData.longitude}
+                      onChange={(e) => setNewBranchData({...newBranchData, longitude: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-400 uppercase">Radius (meters)</label>
+                  <input 
+                    type="number" 
+                    placeholder="100"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                    value={newBranchData.radius}
+                    onChange={(e) => setNewBranchData({...newBranchData, radius: e.target.value})}
                   />
                 </div>
                 
@@ -2354,6 +2438,97 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                     className="flex-1 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {isUpdating === 'adding-branch' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Add Branch'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
+        {editingBranch && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setEditingBranch(null)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-slate-900">Edit Branch Geofence</h3>
+                <button onClick={() => setEditingBranch(null)} className="text-slate-400 hover:text-slate-600">
+                  <CloseIcon className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <form onSubmit={handleUpdateBranch} className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-400 uppercase">Branch Name</label>
+                  <input 
+                    type="text" 
+                    required
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-bold"
+                    value={editingBranch.name}
+                    onChange={(e) => setEditingBranch({...editingBranch, name: e.target.value})}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Latitude</label>
+                    <input 
+                      type="number" 
+                      step="any"
+                      placeholder="17.1234"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                      value={editingBranch.latitude || ''}
+                      onChange={(e) => setEditingBranch({...editingBranch, latitude: parseFloat(e.target.value)})}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-400 uppercase">Longitude</label>
+                    <input 
+                      type="number" 
+                      step="any"
+                      placeholder="78.5678"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                      value={editingBranch.longitude || ''}
+                      onChange={(e) => setEditingBranch({...editingBranch, longitude: parseFloat(e.target.value)})}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-400 uppercase">Radius (meters)</label>
+                  <input 
+                    type="number" 
+                    placeholder="100"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-mono"
+                    value={editingBranch.radius || ''}
+                    onChange={(e) => setEditingBranch({...editingBranch, radius: parseFloat(e.target.value)})}
+                  />
+                </div>
+                
+                <div className="flex gap-3 pt-2">
+                  <button 
+                    type="button"
+                    onClick={() => setEditingBranch(null)}
+                    className="flex-1 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={isUpdating === 'updating-branch'}
+                    className="flex-1 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
+                  >
+                    {isUpdating === 'updating-branch' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Update Geofence'}
                   </button>
                 </div>
               </form>

@@ -234,12 +234,17 @@ async function startServer() {
 
   app.post("/api/branches", async (req, res) => {
     try {
-      const { name } = req.body;
+      const { name, latitude, longitude, radius } = req.body;
       if (!name) return res.status(400).json({ success: false, error: "Branch name is required" });
 
       const { data, error } = await supabase
         .from('branches')
-        .insert([{ name }])
+        .insert([{ 
+          name, 
+          latitude: latitude || null, 
+          longitude: longitude || null, 
+          radius: radius || 100 
+        }])
         .select()
         .single();
 
@@ -247,6 +252,31 @@ async function startServer() {
       res.json({ success: true, branch: data });
     } catch (error: any) {
       console.error("Error creating branch:", error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
+  app.patch("/api/branches/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, latitude, longitude, radius } = req.body;
+      
+      const { data, error } = await supabase
+        .from('branches')
+        .update({ 
+          name, 
+          latitude, 
+          longitude, 
+          radius 
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.json({ success: true, branch: data });
+    } catch (error: any) {
+      console.error("Error updating branch:", error);
       res.status(500).json({ success: false, error: error.message });
     }
   });

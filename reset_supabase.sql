@@ -113,6 +113,9 @@ CREATE POLICY "Allow all access to applications" ON applications FOR ALL USING (
 CREATE TABLE branches (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name TEXT UNIQUE NOT NULL,
+    latitude NUMERIC,
+    longitude NUMERIC,
+    radius NUMERIC DEFAULT 100, -- Default radius in meters
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

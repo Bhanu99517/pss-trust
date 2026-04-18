@@ -87,6 +87,9 @@
       "properties": {
         "id": { "type": "string", "format": "uuid", "description": "Primary key" },
         "name": { "type": "string", "description": "Unique branch name" },
+        "latitude": { "type": "number", "description": "Latitude of the center" },
+        "longitude": { "type": "number", "description": "Longitude of the center" },
+        "radius": { "type": "number", "description": "Geo-fence radius in meters" },
         "created_at": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
       },
       "required": ["name"]

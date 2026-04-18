@@ -12,14 +12,6 @@
       "destination": "/api/branches/index"
     },
     {
-      "source": "/api/send-application-otp",
-      "destination": "/api/send-application-otp"
-    },
-    {
-      "source": "/api/verify-application-otp",
-      "destination": "/api/verify-application-otp"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

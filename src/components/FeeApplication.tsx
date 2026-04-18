@@ -10,7 +10,8 @@ import {
   Plus,
   Trash2,
   ArrowRight,
-  Receipt
+  Receipt,
+  Loader2
 } from 'lucide-react';
 
 interface FeeApplicationProps {
@@ -25,7 +26,12 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const [verifyData, setVerifyData] = useState({ fullName: '', sid: '' });
+  const [otp, setOtp] = useState('');
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
   
   const [formData, setFormData] = useState({
     // Request Form Fields
@@ -92,29 +98,97 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
       
       console.log('Verified student for fee application:', student);
        // Pre-fill branch from student record
+      const studentEmail = student.email;
       setFormData(prev => ({
         ...prev,
         trustBranch: student.trust_branch,
         sid: student.trust_id,
         fullName: student.full_name,
-        pinNo: student.pin_number, // Not in schema yet
+        pinNo: student.pin_number, 
         collegeName: student.college_name,
         phoneNo: student.mobile_number,
-        email: student.email,
+        email: studentEmail,
         trustAttendance: student.trust_attendance,
       }));
-      setIsVerified(true);
+      
+      // Trigger OTP
+      if (!studentEmail) {
+        throw new Error('Email not found in your student record. Please contact the office.');
+      }
+      
+      setIsSendingOtp(true);
+      const resp = await fetch('/api/send-application-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: studentEmail }),
+      });
+      const otpData = await resp.json();
+      if (otpData.success) {
+        setIsOtpSent(true);
+      } else {
+        throw new Error(otpData.error || 'Failed to send OTP');
+      }
     } catch (error: any) {
       console.error('Verification error:', error);
       alert(error.message);
     } finally {
       setIsVerifying(false);
+      setIsSendingOtp(false);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSendOtp = async () => {
+    if (!formData.email) {
+      alert('Email not found in your student record. Please contact the office.');
+      return;
+    }
+    setIsSendingOtp(true);
+    setOtpError('');
+    try {
+      const resp = await fetch('/api/send-application-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email }),
+      });
+      const data = await resp.json();
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to send OTP');
+      }
+    } catch (error: any) {
+      alert('Error sending OTP: ' + error.message);
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otp || otp.length < 6) return;
+    setIsVerifyingOtp(true);
+    setOtpError('');
+    try {
+      const resp = await fetch('/api/verify-application-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, otp }),
+      });
+      const data = await resp.json();
+      if (data.success) {
+        setIsVerified(true);
+        setIsOtpSent(false);
+      } else {
+        setOtpError(data.error || 'Invalid OTP');
+      }
+    } catch (error: any) {
+      setOtpError(error.message);
+    } finally {
+      setIsVerifyingOtp(false);
+    }
   };
 
   const handleAcademicChange = (index: number, field: string, value: string) => {
@@ -137,14 +211,9 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) {
-      alert('Please upload your request letter.');
-      return;
-    }
+  const handleSubmitInternal = async () => {
+    if (!file) return;
     setIsSubmitting(true);
-
     try {
       // 1. Upload file to Supabase Storage
       const fileExt = file.name.split('.').pop();
@@ -190,6 +259,11 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmitInternal();
+  };
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
@@ -228,53 +302,129 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
             <span>Back to Home</span>
           </button>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
-          >
-            <div className="bg-slate-900 p-8 text-white text-center">
-              <h1 className="text-2xl font-bold mb-2">Student Verification</h1>
-              <p className="text-slate-400 text-sm">Enter your details to apply for fee</p>
-            </div>
-
-            <form onSubmit={handleVerify} className="p-8 space-y-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
-                <input 
-                  required
-                  type="text" 
-                  value={verifyData.fullName}
-                  onChange={(e) => setVerifyData(prev => ({ ...prev, fullName: e.target.value }))}
-                  placeholder="As per registration"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">SID</label>
-                <input 
-                  required
-                  type="text" 
-                  value={verifyData.sid}
-                  onChange={(e) => setVerifyData(prev => ({ ...prev, sid: e.target.value }))}
-                  placeholder="Enter SID"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
-                />
-              </div>
-
-              <button 
-                type="submit"
-                disabled={isVerifying}
-                className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+          <AnimatePresence mode="wait">
+            {!isOtpSent ? (
+              <motion.div 
+                key="verify"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
               >
-                {isVerifying ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <span>Verify & Proceed</span>
-                )}
-              </button>
-            </form>
-          </motion.div>
+                <div className="bg-slate-900 p-8 text-white text-center">
+                  <h1 className="text-2xl font-bold mb-2">Student Verification</h1>
+                  <p className="text-slate-400 text-sm">Enter your details to apply for fee</p>
+                </div>
+
+                <form onSubmit={handleVerify} className="p-8 space-y-6">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
+                    <input 
+                      required
+                      type="text" 
+                      value={verifyData.fullName}
+                      onChange={(e) => setVerifyData(prev => ({ ...prev, fullName: e.target.value }))}
+                      placeholder="As per registration"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">SID</label>
+                    <input 
+                      required
+                      type="text" 
+                      value={verifyData.sid}
+                      onChange={(e) => setVerifyData(prev => ({ ...prev, sid: e.target.value }))}
+                      placeholder="Enter SID"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={isVerifying || isSendingOtp}
+                    className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isVerifying || isSendingOtp ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <span>Verify & Proceed</span>
+                    )}
+                  </button>
+                </form>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="otp"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
+              >
+                <div className="bg-slate-900 p-8 text-white text-center">
+                  <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Receipt className="w-8 h-8 text-blue-400" />
+                  </div>
+                  <h1 className="text-2xl font-bold mb-2">Verify Your Email</h1>
+                  <p className="text-slate-400 text-sm">We've sent an OTP to {formData.email}</p>
+                </div>
+
+                <div className="p-8 space-y-6">
+                  <form onSubmit={handleVerifyOtp} className="space-y-6">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-center">Enter 6-Digit OTP</label>
+                      <input 
+                        required
+                        type="text" 
+                        maxLength={6}
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                        className="w-full text-center text-3xl font-bold tracking-[1rem] py-4 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                        placeholder="000000"
+                      />
+                    </div>
+
+                    {otpError && (
+                      <div className="flex items-center gap-2 text-red-600 bg-red-50 p-4 rounded-xl text-sm justify-center">
+                        <AlertCircle className="w-5 h-5 shrink-0" />
+                        <p>{otpError}</p>
+                      </div>
+                    )}
+
+                    <button 
+                      type="submit"
+                      disabled={isVerifyingOtp || otp.length < 6}
+                      className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      {isVerifyingOtp ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <span>Verify & Continue</span>
+                      )}
+                    </button>
+                  </form>
+
+                  <div className="flex flex-col gap-4 text-center">
+                    <button 
+                      type="button"
+                      onClick={handleSendOtp}
+                      disabled={isSendingOtp}
+                      className="text-sm font-bold text-slate-400 hover:text-slate-900 transition-colors"
+                    >
+                      Didn't receive code? Resend OTP
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setIsOtpSent(false)}
+                      className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                    >
+                      Change SID/Name
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     );
@@ -651,12 +801,12 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                     Back to Form
                   </button>
                   <button 
-                    onClick={handleSubmit}
+                    onClick={handleSubmitInternal}
                     disabled={isSubmitting || !file}
                     className="px-12 py-4 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all flex items-center gap-3 shadow-xl shadow-emerald-100 disabled:opacity-50"
                   >
                     {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <>
                         <CheckCircle2 className="w-5 h-5" />

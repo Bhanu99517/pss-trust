@@ -56,6 +56,7 @@ const transporter = nodemailer.createTransport({
 
 // In-memory OTP storage (for demo purposes)
 const loginOtps = new Map<string, { code: string, expires: number }>();
+const applicationOtps = new Map<string, { code: string, expires: number }>();
 
 async function startServer() {
   const app = express();
@@ -117,6 +118,78 @@ async function startServer() {
     } catch (error) {
       console.error("Error sending OTP:", error);
       res.status(500).json({ error: "Failed to send OTP" });
+    }
+  });
+
+  app.post("/api/send-application-otp", async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) return res.status(400).json({ error: "Email is required" });
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+      applicationOtps.set(email, { code: otp, expires });
+
+      console.log("------------------------------------------");
+      console.log(`APPLICATION SUBMISSION OTP FOR ${email}: ${otp}`);
+      console.log("------------------------------------------");
+
+      const isPlaceholder = process.env.SMTP_USER?.includes('your-email') || process.env.SMTP_PASS?.includes('your-gmail');
+
+      if (process.env.SMTP_USER && process.env.SMTP_PASS && !isPlaceholder) {
+        try {
+          const mailOptions = {
+            from: `"PSS Trust" <${process.env.SMTP_USER}>`,
+            to: email,
+            subject: "Fee Application Verification OTP - PSS Trust",
+            text: `Your OTP for Fee Application submission is: ${otp}. It will expire in 10 minutes.`,
+            html: `
+              <div style="font-family: sans-serif; padding: 20px; color: #333 text-align: center;">
+                <h2 style="color: #0f172a;">Application Verification</h2>
+                <p>Use the following code to verify your email for fee application:</p>
+                <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #3b82f6; margin: 20px 0;">${otp}</div>
+                <p>This code will expire in 10 minutes.</p>
+                <br/>
+                <p>Regards,<br/><strong>PSS Trust Team</strong></p>
+              </div>
+            `
+          };
+          await transporter.sendMail(mailOptions);
+        } catch (mailError) {
+          console.error("SMTP Error sending application OTP:", mailError);
+        }
+      }
+
+      res.json({ success: true, message: "OTP sent successfully" });
+    } catch (error) {
+      console.error("Error sending application OTP:", error);
+      res.status(500).json({ error: "Failed to send OTP" });
+    }
+  });
+
+  app.post("/api/verify-application-otp", async (req, res) => {
+    try {
+      const { email, otp } = req.body;
+      if (!email || !otp) return res.status(400).json({ error: "Email and OTP are required" });
+
+      const stored = applicationOtps.get(email);
+      if (!stored) return res.status(400).json({ error: "No OTP found for this email" });
+
+      if (Date.now() > stored.expires) {
+        applicationOtps.delete(email);
+        return res.status(400).json({ error: "OTP has expired" });
+      }
+
+      if (stored.code === otp) {
+        applicationOtps.delete(email);
+        res.json({ success: true });
+      } else {
+        res.status(400).json({ error: "Invalid OTP" });
+      }
+    } catch (error) {
+      console.error("Error verifying application OTP:", error);
+      res.status(500).json({ error: "Verification failed" });
     }
   });
 

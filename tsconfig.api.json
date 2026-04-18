@@ -1,6 +1,3 @@
-config.api · JSON
-Copy
-
 {
   "compilerOptions": {
     "target": "ES2022",
@@ -12,7 +9,5 @@ Copy
     "noEmit": true,
     "strict": false
   },
-  "include": [
-    "api/**/*"
-  ]
+  "include": ["api/**/*"]
 }

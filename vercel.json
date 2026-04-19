@@ -2,11 +2,6 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "@vercel/node@5.7.0"
-    }
-  },
   "rewrites": [
     {
       "source": "/.well-known/(.*)",
@@ -17,7 +12,7 @@
       "destination": "/api/branches/index"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],

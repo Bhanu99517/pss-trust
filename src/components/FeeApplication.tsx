@@ -34,7 +34,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   
   const [formData, setFormData] = useState({
-    // Request Form Fields
     trustBranch: '',
     sid: '',
     date: new Date().toISOString().split('T')[0],
@@ -97,7 +96,7 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
       if (fetchError) throw new Error('Student not found. Please check your SID.');
       
       console.log('Verified student for fee application:', student);
-       // Pre-fill branch from student record
+
       const studentEmail = student.email;
       setFormData(prev => ({
         ...prev,
@@ -111,16 +110,15 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
         trustAttendance: student.trust_attendance,
       }));
       
-      // Trigger OTP
       if (!studentEmail) {
         throw new Error('Email not found in your student record. Please contact the office.');
       }
       
       setIsSendingOtp(true);
-      const resp = await fetch('/api/send-application-otp', {
+      const resp = await fetch('/api/application-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: studentEmail }),
+        body: JSON.stringify({ action: 'send', email: studentEmail }),
       });
       const otpData = await resp.json();
       if (otpData.success) {
@@ -150,10 +148,10 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
     setIsSendingOtp(true);
     setOtpError('');
     try {
-      const resp = await fetch('/api/send-application-otp', {
+      const resp = await fetch('/api/application-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email }),
+        body: JSON.stringify({ action: 'send', email: formData.email }),
       });
       const data = await resp.json();
       if (!data.success) {
@@ -172,10 +170,10 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
     setIsVerifyingOtp(true);
     setOtpError('');
     try {
-      const resp = await fetch('/api/verify-application-otp', {
+      const resp = await fetch('/api/application-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, otp }),
+        body: JSON.stringify({ action: 'verify', email: formData.email, otp }),
       });
       const data = await resp.json();
       if (data.success) {
@@ -215,7 +213,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
     if (!file) return;
     setIsSubmitting(true);
     try {
-      // 1. Upload file to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${formData.sid}_${Date.now()}.${fileExt}`;
       const filePath = `applications/${fileName}`;
@@ -230,7 +227,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
         .from('documents')
         .getPublicUrl(filePath);
 
-      // 2. Insert application record
       const { error: insertError } = await supabase
         .from('applications')
         .insert([{
@@ -478,7 +474,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
               </div>
 
               <div className="p-8 space-y-8">
-                {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Trust Branch</label>
@@ -524,7 +519,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
                 <div className="h-px bg-slate-100" />
 
-                {/* Request Details */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Requesting For</label>
@@ -584,7 +578,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
                 <div className="h-px bg-slate-100" />
 
-                {/* Attendance & Ranks */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Trust Att. %</label>
@@ -612,6 +605,7 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                       type="text" 
                       name="academicYear"
                       value={formData.academicYear}
+                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
                     />
                   </div>
@@ -649,7 +643,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
                 <div className="h-px bg-slate-100" />
 
-                {/* Academic Records Table */}
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Academic Performance</h3>
@@ -720,7 +713,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
                 <div className="h-px bg-slate-100" />
 
-                {/* Contribution */}
                 <div>
                   <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Your contribution towards Trust:</label>
                   <textarea 

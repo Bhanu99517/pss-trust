@@ -306,29 +306,48 @@ function Layout() {
       {/* Footer / Bottom Info Section */}
       {!isDashboard && (
         <footer className="bg-slate-50 py-6 px-6 lg:px-8 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-400 text-[10px] lg:text-xs font-bold uppercase tracking-widest text-center md:text-left">
-              © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust. All rights reserved.
-            </p>
-            <div className="flex items-center gap-5">
-              <a href="/privacy_policy.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Privacy Policy</a>
-              <span className="text-slate-300">|</span>
-              <a href="/terms_of_service.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Terms of Service</a>
-              <span className="text-slate-300">|</span>
-              <a href="/data_retention.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Data Retention</a>
-              <span className="text-slate-300">|</span>
-              <a href="/cookie_policy.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Cookie Policy</a>
-              <span className="text-slate-200 hidden md:inline">|</span>
-              <a href="https://www.facebook.com/people/PssTrust/100080242307255/" className="text-slate-400 hover:text-blue-600 transition-colors" aria-label="Facebook">
-                <Facebook className="w-4 h-4" />
+          <div className="max-w-7xl mx-auto flex flex-col gap-4">
+
+            {/* Top row — copyright + social */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+              <p className="text-slate-400 text-[10px] lg:text-xs font-bold uppercase tracking-widest text-center md:text-left">
+                © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare &amp; Charitable Trust. All rights reserved.
+              </p>
+              <div className="flex items-center gap-4">
+                <a href="https://www.facebook.com/people/PssTrust/100080242307255/" className="text-slate-400 hover:text-blue-600 transition-colors" aria-label="Facebook">
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" className="text-slate-400 hover:text-blue-700 transition-colors" aria-label="LinkedIn">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <a href="https://www.youtube.com/@psstrust" className="text-slate-400 hover:text-red-600 transition-colors" aria-label="YouTube">
+                  <Youtube className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-200" />
+
+            {/* Bottom row — policy links */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2">
+              <a href="/privacy_policy.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+                Privacy Policy
               </a>
-              <a href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" className="text-slate-400 hover:text-blue-700 transition-colors" aria-label="LinkedIn">
-                <Linkedin className="w-4 h-4" />
+              <span className="text-slate-300 text-[10px]">|</span>
+              <a href="/terms_of_service.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+                Terms of Service
               </a>
-              <a href="https://www.youtube.com/@psstrust" className="text-slate-400 hover:text-red-600 transition-colors" aria-label="YouTube">
-                <Youtube className="w-4 h-4" />
+              <span className="text-slate-300 text-[10px]">|</span>
+              <a href="/data_retention.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+                Data Retention Policy
+              </a>
+              <span className="text-slate-300 text-[10px]">|</span>
+              <a href="/cookie_policy.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+                Cookie &amp; Storage Policy
               </a>
             </div>
+
           </div>
         </footer>
       )}

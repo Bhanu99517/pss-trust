@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms of Service — PSS Trust</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0f2a5c; --blue: #1d4ed8; --blue-mid: #2563eb;
+      --blue-lt: #dbeafe; --blue-xl: #eff6ff; --teal: #0f766e;
+      --teal-lt: #ccfbf1; --green: #15803d; --green-lt: #dcfce7;
+      --red: #b91c1c; --red-lt: #fee2e2; --amber: #92400e;
+      --amber-lt: #fef3c7; --slate: #1e293b; --mid: #334155;
+      --muted: #64748b; --border: #cbd5e1; --bg: #f8fafc;
+      --white: #ffffff; --radius: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--mid); min-height: 100vh; line-height: 1.7; }
+
+    /* LAYOUT */
+    .content-wrap { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
+
+    /* META CARD */
+    .meta-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px 28px; margin-bottom: 36px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .meta-item label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .meta-item span { font-size: 13px; font-weight: 500; color: var(--slate); }
+
+    /* CALLOUTS */
+    .callout { border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout-blue  { background: var(--blue-xl);  border-color: var(--blue-mid); color: #1e3a8a; }
+    .callout-teal  { background: var(--teal-lt);  border-color: var(--teal);     color: #134e4a; }
+    .callout-green { background: var(--green-lt); border-color: var(--green);    color: #14532d; font-weight: 600; }
+    .callout-red   { background: var(--red-lt);   border-color: var(--red);      color: #7f1d1d; font-weight: 600; }
+    .callout-amber { background: var(--amber-lt); border-color: #d97706;         color: var(--amber); }
+
+    /* HEADINGS */
+    .content-wrap h1 { font-family: 'Playfair Display',serif; font-size: clamp(19px,2.8vw,25px); font-weight: 700; color: var(--navy); margin: 44px 0 10px; padding-bottom: 9px; border-bottom: 2px solid var(--blue-lt); }
+    .content-wrap h1:first-of-type { margin-top: 0; }
+    .content-wrap h2 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 28px 0 8px; padding-left: 11px; border-left: 3px solid var(--teal); }
+    .content-wrap h3 { font-size: 14px; font-weight: 700; color: var(--mid); margin: 20px 0 6px; }
+    .content-wrap p { font-size: 14px; color: var(--mid); margin: 9px 0; line-height: 1.75; }
+    .content-wrap ul, .content-wrap ol { margin: 9px 0 9px 22px; }
+    .content-wrap li { font-size: 14px; color: var(--mid); margin: 5px 0; line-height: 1.7; padding-left: 3px; }
+    .content-wrap li::marker { color: var(--blue-mid); font-weight: 600; }
+    .content-wrap a { color: var(--blue-mid); text-decoration: none; }
+    .content-wrap a:hover { text-decoration: underline; }
+    code { font-family: 'DM Mono',monospace; font-size: 12px; background: var(--blue-xl); color: var(--blue); padding: 1px 5px; border-radius: 4px; }
+
+    /* TABLES */
+    .tbl-wrap { overflow-x: auto; margin: 14px 0 22px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--navy); }
+    thead th { padding: 11px 13px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: #e2e8f0; white-space: nowrap; }
+    tbody tr:nth-child(even) { background: var(--bg); }
+    tbody tr:nth-child(odd)  { background: var(--white); }
+    tbody tr:hover { background: var(--blue-xl); transition: background .15s; }
+    tbody td { padding: 10px 13px; vertical-align: top; border-top: 1px solid var(--border); color: var(--mid); line-height: 1.6; }
+    tbody td strong { color: var(--slate); font-weight: 600; }
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-blue  { background: var(--blue-lt);  color: var(--blue); }
+    .badge-teal  { background: var(--teal-lt);  color: var(--teal); }
+    .badge-green { background: var(--green-lt); color: var(--green); }
+
+    /* INFO GRID */
+    .info-grid { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 14px 0 22px; }
+    .info-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-row:nth-child(even) { background: var(--bg); }
+    .info-row:nth-child(odd)  { background: var(--white); }
+    .info-label { padding: 10px 15px; font-size: 12px; font-weight: 600; color: var(--navy); background: var(--blue-xl); border-right: 1px solid var(--border); }
+    .info-value { padding: 10px 15px; font-size: 13px; color: var(--mid); }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 16px; }
+      .content-wrap { padding: 28px 16px 64px; }
+      .info-row { grid-template-columns: 1fr; }
+      .info-label { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    @media print {
+      body { background: #fff; }
+    }
+</style>
+</head>
+<body>
+
+<main class="content-wrap">
+  <div class="meta-card"><div class="meta-item"><label>Effective Date</label><span>April 20, 2026</span></div><div class="meta-item"><label>Last Updated</label><span>April 20, 2026</span></div><div class="meta-item"><label>Version</label><span>1.0</span></div><div class="meta-item"><label>Applies To</label><span>pss-trust.vercel.app</span></div><div class="meta-item"><label>Organization</label><span>PSS Trust — Reg No: 95/2003</span></div></div>
+  
+<div class="callout callout-blue">By accessing or using the PSS Trust Student Management Portal, you agree to be bound by these Terms of Service. If you do not agree, please do not use the portal.</div>
+
+<h1>1. Acceptance of Terms</h1>
+<p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User", "Student", "Administrator") and Potukuchi Somasundara Social Welfare and Charitable Trust ("PSS Trust") governing your use of the Portal at <a href="https://pss-trust.vercel.app" target="_blank">https://pss-trust.vercel.app</a>.</p>
+<p>By registering on, accessing, or using the Portal in any way, you confirm that you have read, understood, and agree to be bound by these Terms, our <a href="privacy_policy.html">Privacy Policy</a>, and <a href="data_retention.html">Data Retention Policy</a>.</p>
+
+<h1>2. Eligibility</h1>
+<p>You may use this Portal only if:</p>
+<ul>
+  <li>You are a currently enrolled student beneficiary of PSS Trust, or</li>
+  <li>You are an authorized administrator (Branch Incharge, Super Incharge, or Chairman), and</li>
+  <li>You have been formally admitted or appointed through the trust's official processes</li>
+  <li>You have received a valid invite code from the Chairman (for student self-registration)</li>
+</ul>
+<div class="callout callout-red">Unauthorized access to any part of this Portal is strictly prohibited and may constitute an offence under the Indian Information Technology Act, 2000.</div>
+
+<h1>3. User Accounts &amp; Responsibilities</h1>
+<h2>3.1 Account Security</h2>
+<ul>
+  <li>You are responsible for maintaining the confidentiality of your login credentials</li>
+  <li>You must not share your credentials with any other person</li>
+  <li>You must notify PSS Trust immediately if you suspect unauthorized access to your account</li>
+  <li>PSS Trust will not be liable for loss resulting from unauthorized use caused by your failure to maintain credential security</li>
+</ul>
+<h2>3.2 Accuracy of Information</h2>
+<ul>
+  <li>You agree to provide accurate, complete, and truthful information during registration and in all fee applications</li>
+  <li>You agree to keep your profile information up to date</li>
+  <li>Providing false or fabricated information — including academic records or attendance percentages — is grounds for immediate suspension and disqualification from PSS Trust welfare programs</li>
+  <li>PSS Trust reserves the right to verify any submitted information through independent sources</li>
+</ul>
+<h2>3.3 Face Registration</h2>
+<ul>
+  <li>By completing Face Registration, you consent to collection and storage of your biometric face data as described in the <a href="privacy_policy.html">Privacy Policy</a></li>
+  <li>You must be the person whose face is registered — registering another person's face violates these Terms</li>
+  <li>You must not attempt to defeat, bypass, or manipulate the face recognition attendance system</li>
+</ul>
+
+<h1>4. Permitted Use</h1>
+<p>You may use the Portal exclusively for:</p>
+<ul>
+  <li>Registering as a student beneficiary of PSS Trust</li>
+  <li>Enrolling your face for attendance marking</li>
+  <li>Marking your daily attendance using the face recognition system</li>
+  <li>Submitting genuine fee assistance applications</li>
+  <li>Checking the status of your submitted applications</li>
+  <li>Viewing your personal attendance records</li>
+  <li>Changing your account password</li>
+  <li>Viewing public information about PSS Trust (gallery, success stories, contact)</li>
+</ul>
+<p>Administrators may additionally use the Portal for managing students, reviewing applications, managing incharge accounts, and administering trust branches in accordance with their assigned role.</p>
+
+<h1>5. Prohibited Use</h1>
+<div class="callout callout-red">⛔ Violation of any of the following prohibitions may result in immediate account suspension, removal from PSS Trust programs, and/or legal action.</div>
+<p>You must NOT:</p>
+<ul>
+  <li>Access the Portal or any account other than your own without authorization</li>
+  <li>Submit fraudulent fee applications, falsified academic records, or fabricated documents</li>
+  <li>Attempt to manipulate, reverse-engineer, or tamper with the face recognition or attendance system</li>
+  <li>Use the Portal to harass, impersonate, or harm other students or administrators</li>
+  <li>Attempt to gain unauthorized access to admin dashboards or other students' data</li>
+  <li>Upload malicious files, scripts, or content through the document upload feature</li>
+  <li>Use automated tools, bots, or scrapers to interact with the Portal</li>
+  <li>Reproduce, distribute, or commercially exploit any content or functionality of the Portal</li>
+  <li>Interfere with the Portal's infrastructure, servers, or networks</li>
+</ul>
+
+<h1>6. Intellectual Property</h1>
+<p>The PSS Trust Student Management Portal, including its source code, design, and documentation, is licensed under the MIT License. The name "PSS Trust", the trust's logo, and related branding are the property of Potukuchi Somasundara Social Welfare and Charitable Trust. You may not use these marks without prior written permission.</p>
+<p>Student-submitted content (documents, photographs) remains the property of the respective student. By uploading content to the Portal, you grant PSS Trust a non-exclusive license to store and use that content for processing your application.</p>
+
+<h1>7. Disclaimers</h1>
+<h2>7.1 Service Availability</h2>
+<p>The Portal is provided "as is" and "as available". PSS Trust makes no warranty that the Portal will be continuously available, error-free, or free of harmful components. We may suspend or discontinue the Portal at any time for maintenance or operational reasons.</p>
+<h2>7.2 Face Recognition Accuracy</h2>
+<p>The face recognition attendance system uses AI-based facial analysis. While we strive for accuracy, we do not guarantee 100% correct identification in all conditions (poor lighting, camera angle, etc.). If the system fails to recognize you, contact your Branch Incharge to record attendance manually.</p>
+<h2>7.3 No Guarantee of Benefits</h2>
+<p>Registering on the Portal does not guarantee approval of fee applications or continued enrollment in PSS Trust welfare programs. All applications are subject to review and approval based on eligibility criteria.</p>
+
+<h1>8. Limitation of Liability</h1>
+<p>To the fullest extent permitted by applicable law, PSS Trust, its trustees, officers, and contributors shall not be liable for:</p>
+<ul>
+  <li>Any indirect, incidental, or consequential damages arising from your use of the Portal</li>
+  <li>Data loss caused by technical failures, cyberattacks, or third-party service outages</li>
+  <li>Decisions made by administrators regarding your fee applications</li>
+  <li>Errors in face recognition resulting in missed attendance records</li>
+</ul>
+<p>PSS Trust is a registered charitable trust. Our total liability to any individual user shall not exceed INR 1,000 (Indian Rupees One Thousand).</p>
+
+<h1>9. Suspension &amp; Termination</h1>
+<p>PSS Trust reserves the right to suspend or terminate your account at any time for violation of these Terms, submission of fraudulent information, completion of your enrollment, or legal/regulatory requirements. Upon termination, your right to use the Portal ceases immediately.</p>
+
+<h1>10. Governing Law &amp; Dispute Resolution</h1>
+<p>These Terms shall be governed by the laws of India, specifically the State of Telangana. Any disputes shall be subject to the exclusive jurisdiction of the courts in Hyderabad, Telangana. Before initiating formal proceedings, you agree to first contact PSS Trust and attempt resolution in good faith.</p>
+
+<h1>11. Changes to Terms</h1>
+<p>We may update these Terms at any time. We will revise the "Last Updated" date and notify registered users by email for material changes. Continued use of the Portal after the effective date constitutes acceptance of the revised Terms.</p>
+
+<h1>12. Contact</h1>
+<div class="info-grid">
+  <div class="info-row"><div class="info-label">Organization</div><div class="info-value">Potukuchi Somasundara Social Welfare and Charitable Trust</div></div>
+  <div class="info-row"><div class="info-label">Registration</div><div class="info-value">Reg No: 95/2003, Telangana, India</div></div>
+  <div class="info-row"><div class="info-label">Web Contact</div><div class="info-value"><a href="https://pss-trust.vercel.app/contact-us" target="_blank">pss-trust.vercel.app/contact-us</a></div></div>
+  <div class="info-row"><div class="info-label">Portal</div><div class="info-value"><a href="https://pss-trust.vercel.app" target="_blank">https://pss-trust.vercel.app</a></div></div>
+</div>
+<div class="callout callout-blue">These Terms of Service were prepared in good faith for PSS Trust. Consult a qualified legal professional for jurisdiction-specific compliance advice.</div>
+
+</main>
+
+</body>
+</html>

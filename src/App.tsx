@@ -311,6 +311,14 @@ function Layout() {
               © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust. All rights reserved.
             </p>
             <div className="flex items-center gap-5">
+              <a href="/privacy_policy.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Privacy Policy</a>
+              <span className="text-slate-300">|</span>
+              <a href="/terms_of_service.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Terms of Service</a>
+              <span className="text-slate-300">|</span>
+              <a href="/data_retention.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Data Retention</a>
+              <span className="text-slate-300">|</span>
+              <a href="/cookie_policy.html" className="text-slate-400 hover:text-slate-600 text-[10px] lg:text-xs font-medium transition-colors">Cookie Policy</a>
+              <span className="text-slate-200 hidden md:inline">|</span>
               <a href="https://www.facebook.com/people/PssTrust/100080242307255/" className="text-slate-400 hover:text-blue-600 transition-colors" aria-label="Facebook">
                 <Facebook className="w-4 h-4" />
               </a>

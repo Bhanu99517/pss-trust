@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Retention Policy — PSS Trust</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0f2a5c; --blue: #1d4ed8; --blue-mid: #2563eb;
+      --blue-lt: #dbeafe; --blue-xl: #eff6ff; --teal: #0f766e;
+      --teal-lt: #ccfbf1; --green: #15803d; --green-lt: #dcfce7;
+      --red: #b91c1c; --red-lt: #fee2e2; --amber: #92400e;
+      --amber-lt: #fef3c7; --slate: #1e293b; --mid: #334155;
+      --muted: #64748b; --border: #cbd5e1; --bg: #f8fafc;
+      --white: #ffffff; --radius: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--mid); min-height: 100vh; line-height: 1.7; }
+
+    /* LAYOUT */
+    .content-wrap { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
+
+    /* META CARD */
+    .meta-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px 28px; margin-bottom: 36px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .meta-item label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .meta-item span { font-size: 13px; font-weight: 500; color: var(--slate); }
+
+    /* CALLOUTS */
+    .callout { border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; font-size: 14px; line-height: 1.65; border-left: 4px solid; }
+    .callout-blue  { background: var(--blue-xl);  border-color: var(--blue-mid); color: #1e3a8a; }
+    .callout-teal  { background: var(--teal-lt);  border-color: var(--teal);     color: #134e4a; }
+    .callout-green { background: var(--green-lt); border-color: var(--green);    color: #14532d; font-weight: 600; }
+    .callout-red   { background: var(--red-lt);   border-color: var(--red);      color: #7f1d1d; font-weight: 600; }
+    .callout-amber { background: var(--amber-lt); border-color: #d97706;         color: var(--amber); }
+
+    /* HEADINGS */
+    .content-wrap h1 { font-family: 'Playfair Display',serif; font-size: clamp(19px,2.8vw,25px); font-weight: 700; color: var(--navy); margin: 44px 0 10px; padding-bottom: 9px; border-bottom: 2px solid var(--blue-lt); }
+    .content-wrap h1:first-of-type { margin-top: 0; }
+    .content-wrap h2 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 28px 0 8px; padding-left: 11px; border-left: 3px solid var(--teal); }
+    .content-wrap h3 { font-size: 14px; font-weight: 700; color: var(--mid); margin: 20px 0 6px; }
+    .content-wrap p { font-size: 14px; color: var(--mid); margin: 9px 0; line-height: 1.75; }
+    .content-wrap ul, .content-wrap ol { margin: 9px 0 9px 22px; }
+    .content-wrap li { font-size: 14px; color: var(--mid); margin: 5px 0; line-height: 1.7; padding-left: 3px; }
+    .content-wrap li::marker { color: var(--blue-mid); font-weight: 600; }
+    .content-wrap a { color: var(--blue-mid); text-decoration: none; }
+    .content-wrap a:hover { text-decoration: underline; }
+    code { font-family: 'DM Mono',monospace; font-size: 12px; background: var(--blue-xl); color: var(--blue); padding: 1px 5px; border-radius: 4px; }
+
+    /* TABLES */
+    .tbl-wrap { overflow-x: auto; margin: 14px 0 22px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--navy); }
+    thead th { padding: 11px 13px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: #e2e8f0; white-space: nowrap; }
+    tbody tr:nth-child(even) { background: var(--bg); }
+    tbody tr:nth-child(odd)  { background: var(--white); }
+    tbody tr:hover { background: var(--blue-xl); transition: background .15s; }
+    tbody td { padding: 10px 13px; vertical-align: top; border-top: 1px solid var(--border); color: var(--mid); line-height: 1.6; }
+    tbody td strong { color: var(--slate); font-weight: 600; }
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-blue  { background: var(--blue-lt);  color: var(--blue); }
+    .badge-teal  { background: var(--teal-lt);  color: var(--teal); }
+    .badge-green { background: var(--green-lt); color: var(--green); }
+
+    /* INFO GRID */
+    .info-grid { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin: 14px 0 22px; }
+    .info-row { display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-row:nth-child(even) { background: var(--bg); }
+    .info-row:nth-child(odd)  { background: var(--white); }
+    .info-label { padding: 10px 15px; font-size: 12px; font-weight: 600; color: var(--navy); background: var(--blue-xl); border-right: 1px solid var(--border); }
+    .info-value { padding: 10px 15px; font-size: 13px; color: var(--mid); }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 16px; }
+      .content-wrap { padding: 28px 16px 64px; }
+      .info-row { grid-template-columns: 1fr; }
+      .info-label { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    @media print {
+      body { background: #fff; }
+    }
+</style>
+</head>
+<body>
+
+<main class="content-wrap">
+  <div class="meta-card"><div class="meta-item"><label>Effective Date</label><span>April 20, 2026</span></div><div class="meta-item"><label>Last Updated</label><span>April 20, 2026</span></div><div class="meta-item"><label>Version</label><span>1.0</span></div><div class="meta-item"><label>Applies To</label><span>pss-trust.vercel.app</span></div><div class="meta-item"><label>Organization</label><span>PSS Trust — Reg No: 95/2003</span></div></div>
+  
+<div class="callout callout-blue">This Data Retention Policy defines how long PSS Trust retains different categories of personal data collected through the portal, and the procedures for secure deletion when data is no longer needed.</div>
+
+<h1>1. Purpose</h1>
+<p>PSS Trust collects personal data to deliver welfare services to BPL students. This policy ensures we retain data only for as long as necessary for operational, legal, and audit purposes — and that we delete data securely when retention periods expire.</p>
+<p>This policy applies to all data stored in the Supabase database, Supabase Storage, and email systems used by the PSS Trust portal.</p>
+
+<h1>2. Data Retention Schedule</h1>
+<div class="tbl-wrap"><table>
+  <thead>
+    <tr><th>Data Category</th><th>Storage Location</th><th>Retention Period</th><th>Basis</th><th>Deletion Method</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Student profile</strong><br>(name, DOB, contact, address, SSC, course)</td>
+      <td>Supabase DB — <code>students</code> table</td>
+      <td>Active enrollment + <strong>5 years</strong> after completion</td>
+      <td>Operational necessity, charity audit</td>
+      <td>Delete student row; linked records cascade-deleted</td>
+    </tr>
+    <tr>
+      <td><strong>Attendance records</strong><br>(dates, method)</td>
+      <td>Supabase DB — <code>attendance</code> table</td>
+      <td>Active enrollment + <strong>3 years</strong> after completion</td>
+      <td>Program monitoring, audit trail</td>
+      <td>Cascade-deleted with student record or manual DELETE</td>
+    </tr>
+    <tr>
+      <td><strong>Biometric face descriptor</strong><br>(float vector)</td>
+      <td>Supabase DB — <code>attendance_faces</code> table</td>
+      <td>Active enrollment only — deleted immediately at program completion or on request</td>
+      <td>Explicit consent; withdrawn when enrollment ends</td>
+      <td>DELETE row; no backup retained</td>
+    </tr>
+    <tr>
+      <td><strong>Face photograph</strong></td>
+      <td>Supabase Storage — <code>faces</code> bucket</td>
+      <td>Active enrollment only — deleted at program completion or on request</td>
+      <td>Explicit consent</td>
+      <td>Delete file from Supabase Storage; no archive</td>
+    </tr>
+    <tr>
+      <td><strong>Fee applications</strong><br>(all fields, academic records)</td>
+      <td>Supabase DB — <code>applications</code> table</td>
+      <td><strong>7 years</strong> from submission date</td>
+      <td>Charity audit, accountability, legal compliance</td>
+      <td>Manual DELETE after 7-year mark</td>
+    </tr>
+    <tr>
+      <td><strong>Uploaded fee documents</strong><br>(PDFs, images)</td>
+      <td>Supabase Storage — <code>fee-documents</code> / <code>documents</code> buckets</td>
+      <td><strong>7 years</strong> from submission date</td>
+      <td>Linked to application audit record</td>
+      <td>Delete file from Supabase Storage after 7 years</td>
+    </tr>
+    <tr>
+      <td><strong>OTP codes</strong></td>
+      <td>Supabase DB — <code>otp_codes</code> table</td>
+      <td><strong>10 minutes</strong> from generation (auto-expiry)</td>
+      <td>Security — short-lived tokens only</td>
+      <td>Automatic DELETE on expiry via API</td>
+    </tr>
+    <tr>
+      <td><strong>Admin incharge records</strong></td>
+      <td>Supabase DB — <code>incharges</code> table + Supabase Auth</td>
+      <td>Duration of admin appointment + <strong>1 year</strong></td>
+      <td>Operational, access audit</td>
+      <td>DELETE row + Supabase Auth user deletion via API</td>
+    </tr>
+    <tr>
+      <td><strong>Branch records</strong></td>
+      <td>Supabase DB — <code>branches</code> table</td>
+      <td>Indefinite while branch is active</td>
+      <td>Operational requirement</td>
+      <td>DELETE when branch is closed</td>
+    </tr>
+    <tr>
+      <td><strong>Email delivery logs</strong></td>
+      <td>Gmail SMTP server logs</td>
+      <td>30–90 days (Google default)</td>
+      <td>Email delivery confirmation</td>
+      <td>Managed by Google; not stored by PSS Trust</td>
+    </tr>
+    <tr>
+      <td><strong>Server access logs</strong><br>(IP, requests)</td>
+      <td>Vercel platform logs</td>
+      <td>30 days (Vercel default)</td>
+      <td>Security, fraud detection</td>
+      <td>Managed by Vercel; not stored by PSS Trust</td>
+    </tr>
+    <tr>
+      <td><strong>Auth session tokens</strong></td>
+      <td>Browser localStorage (client-side)</td>
+      <td>Until logout or session expiry</td>
+      <td>Security</td>
+      <td>Cleared on logout via <code>supabase.auth.signOut()</code></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h1>3. Deletion Procedures</h1>
+<h2>3.1 Routine Deletion</h2>
+<ul>
+  <li><strong>OTP codes:</strong> Expired codes are deleted by the API upon verification failure or periodic cleanup. No manual intervention required.</li>
+  <li><strong>Session tokens:</strong> Cleared automatically on user logout.</li>
+  <li><strong>Server/email logs:</strong> Managed automatically by Vercel and Google.</li>
+</ul>
+
+<h2>3.2 Student Departure / Program Completion</h2>
+<p>When a student completes their program or leaves PSS Trust:</p>
+<ol>
+  <li>Chairman or authorized admin marks the student as inactive</li>
+  <li>Biometric face data (descriptor + photograph) is deleted immediately</li>
+  <li>Student profile, attendance, and application records are retained per the schedule in Section 2</li>
+  <li>A deletion completion record is maintained for audit purposes</li>
+</ol>
+
+<h2>3.3 Deletion on Request (Right to Erasure)</h2>
+<p>When a valid deletion request is received:</p>
+<ol>
+  <li>Identity of the requester is verified</li>
+  <li>Legal retention obligations are assessed — data required for audit cannot be deleted</li>
+  <li>All data not subject to mandatory retention is deleted</li>
+  <li>Written confirmation of deletion is sent to the requester within 30 days</li>
+</ol>
+
+<h2>3.4 Annual Review</h2>
+<p>The Chairman or designated administrator shall conduct an annual review of all stored data to identify records that have passed their retention period and schedule them for deletion.</p>
+
+<h1>4. Third-Party Retention</h1>
+<div class="tbl-wrap"><table>
+  <thead><tr><th>Provider</th><th>Data Held</th><th>Their Retention Policy</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Supabase</strong></td><td>All DB data, face photos, documents</td><td>Retained until PSS Trust deletes it; platform data per supabase.com/privacy</td></tr>
+    <tr><td><strong>Vercel</strong></td><td>Request logs, IP addresses</td><td>30 days per vercel.com/legal/privacy-policy</td></tr>
+    <tr><td><strong>Google (Gmail SMTP)</strong></td><td>Email delivery logs</td><td>30–90 days per Google Workspace policy</td></tr>
+  </tbody>
+</table></div>
+
+<h1>5. Security During Retention</h1>
+<p>All data retained by PSS Trust is protected as described in the <a href="privacy_policy.html">Privacy Policy</a> — including Row Level Security, encrypted transport, and restricted storage bucket access. Retained data is not shared beyond the access controls defined in the admin role hierarchy.</p>
+
+<h1>6. Policy Review</h1>
+<p>This Data Retention Policy will be reviewed annually or whenever there is a material change to the data collected or applicable legal requirements. The Chairman is responsible for ensuring this policy is current and enforced.</p>
+
+<h1>7. Contact</h1>
+<div class="info-grid">
+  <div class="info-row"><div class="info-label">Organization</div><div class="info-value">Potukuchi Somasundara Social Welfare and Charitable Trust</div></div>
+  <div class="info-row"><div class="info-label">Registration</div><div class="info-value">Reg No: 95/2003, Telangana, India</div></div>
+  <div class="info-row"><div class="info-label">Web Contact</div><div class="info-value"><a href="https://pss-trust.vercel.app/contact-us" target="_blank">pss-trust.vercel.app/contact-us</a></div></div>
+</div>
+<div class="callout callout-blue">This Data Retention Policy was prepared in good faith for PSS Trust. Consult a qualified legal professional for jurisdiction-specific compliance advice.</div>
+
+</main>
+
+</body>
+</html>

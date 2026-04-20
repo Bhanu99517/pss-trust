@@ -474,10 +474,10 @@ function AppContent() {
         <Route path="/success-stories" element={<SuccessStories />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<Contact />} />
-        <Route path="/privacy-policy"   element={<PrivacyPolicy />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
-        <Route path="/data-retention"   element={<DataRetention />} />
-        <Route path="/cookie-policy"    element={<CookiePolicy />} />
+        <Route path="/data-retention" element={<DataRetention />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
         {/* Legacy redirects */}
         <Route path="/privacy-policy" element={<Navigate to="/privacy_policy.html" replace />} />
         <Route path="/terms-of-service" element={<Navigate to="/terms_of_service.html" replace />} />

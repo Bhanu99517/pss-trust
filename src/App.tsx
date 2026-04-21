@@ -314,7 +314,7 @@ function Layout() {
           <div className="max-w-7xl mx-auto flex flex-col gap-8">
             
             {/* Top Section: Identity + Social */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 md:pl-12 lg:pl-24 xl:pl-32 items-start transition-all duration-300">
               <div className="flex items-center gap-4">
                 <img 
                   src={PSS_LOGO} 
@@ -328,7 +328,7 @@ function Layout() {
                 </div>
               </div>
 
-              {/* Social Icons - Left Aligned */}
+              {/* Social Icons - Left Aligned with the Branding */}
               <div className="flex items-center gap-3">
                 <a 
                   href="https://www.facebook.com/people/PssTrust/100080242307255/" 

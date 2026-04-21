@@ -16,13 +16,17 @@ import {
 } from 'react-router-dom';
 import { 
   Phone, 
+  Mail, 
+  MapPin, 
   ChevronDown, 
   Menu, 
   X,
   ArrowRight,
   Facebook,
+  Instagram,
   Linkedin,
   Youtube,
+  Twitter
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -90,6 +94,10 @@ function Layout() {
     },
   ];
 
+  const branches = [
+    "BHEL", "Bollaram", "MYP", "MKR", "ECIL"
+  ];
+
   const isDashboard = location.pathname.includes('dashboard') || 
                       location.pathname === '/change-password' || 
                       location.pathname === '/admin-login' || 
@@ -97,18 +105,19 @@ function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans text-slate-900 overflow-x-hidden">
-
-      {/* ── Top Header Info Bar ─────────────────────────────── */}
+      {/* Top Header Info Bar */}
       {!isDashboard && (
         <div className="hidden lg:flex justify-between items-center px-8 py-3 bg-slate-50 border-b border-slate-200">
-          <div className="flex items-center gap-3">
-            <img src={PSS_LOGO} alt="PSS Logo" className="w-12 h-12 rounded-full border border-slate-200" referrerPolicy="no-referrer" />
-            <div>
-              <h1 className="text-lg font-bold text-slate-800 leading-tight">Potukuchi Somasundara</h1>
-              <p className="text-xs font-medium text-slate-500">Social Welfare &amp; Charitable Trust</p>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+              <img src={PSS_LOGO} alt="PSS Logo" className="w-12 h-12 rounded-full border border-slate-200" referrerPolicy="no-referrer" />
+              <div>
+                <h1 className="text-lg font-bold text-slate-800 leading-tight">Potukuchi Somasundara</h1>
+                <p className="text-xs font-medium text-slate-500">Social Welfare & Charitable Trust</p>
+              </div>
             </div>
           </div>
-
+          
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-3">
               <img src={CHAIRMAN_PHOTO} alt="Chairman" className="w-10 h-10 rounded-full border border-slate-200" referrerPolicy="no-referrer" />
@@ -125,23 +134,24 @@ function Layout() {
         </div>
       )}
 
-      {/* ── Navigation Bar ──────────────────────────────────── */}
+      {/* Navigation Bar */}
       {!isDashboard && (
         <nav className="sticky top-0 z-50 bg-slate-900 text-white px-4 lg:px-8 py-3 shadow-lg">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-
-            {/* Mobile logo */}
+            {/* Mobile Logo/Title */}
             <Link to="/" className="lg:hidden flex items-center gap-2">
               <img src={PSS_LOGO} alt="PSS Logo" className="w-8 h-8 rounded-full" referrerPolicy="no-referrer" />
               <span className="font-bold text-sm">PSS Trust</span>
             </Link>
 
-            {/* Desktop menu */}
+            {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-8">
               {navItems.map((item) => (
                 <div key={item.id || 'home-link'} className="relative group">
                   {item.hasDropdown ? (
-                    <button className={`text-sm font-medium transition-colors flex items-center gap-1 hover:text-emerald-400 py-4 ${activeSection === item.id ? 'text-emerald-400' : 'text-slate-300'}`}>
+                    <button
+                      className={`text-sm font-medium transition-colors flex items-center gap-1 hover:text-emerald-400 py-4 ${activeSection === item.id ? 'text-emerald-400' : 'text-slate-300'}`}
+                    >
                       {item.label}
                       <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
                     </button>
@@ -157,7 +167,7 @@ function Layout() {
                   {item.hasDropdown && (
                     <div className="absolute top-full left-0 w-56 bg-white rounded-xl shadow-2xl border border-slate-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform origin-top scale-95 group-hover:scale-100 z-[100]">
                       {item.subItems?.map((sub, idx) => (
-                        <Link
+                        <Link 
                           key={idx}
                           to={sub.path}
                           className="w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
@@ -172,13 +182,22 @@ function Layout() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link to="/admin-login" className="hidden sm:block px-4 py-1.5 text-xs font-bold bg-white text-slate-900 rounded-md hover:bg-slate-100 transition-colors">
+              <Link 
+                to="/admin-login"
+                className="hidden sm:block px-4 py-1.5 text-xs font-bold bg-white text-slate-900 rounded-md hover:bg-slate-100 transition-colors"
+              >
                 Admin Login
               </Link>
-              <Link to="/signup" className="px-4 py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition-colors">
+              <Link 
+                to="/signup"
+                className="px-4 py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-md hover:bg-emerald-500 transition-colors"
+              >
                 Sign Up
               </Link>
-              <button className="lg:hidden p-1 text-slate-300 hover:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <button 
+                className="lg:hidden p-1 text-slate-300 hover:text-white"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
@@ -186,10 +205,11 @@ function Layout() {
         </nav>
       )}
 
-      {/* ── Mobile Menu Drawer ──────────────────────────────── */}
+      {/* Mobile Menu Drawer */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -197,6 +217,8 @@ function Layout() {
               onClick={() => setIsMenuOpen(false)}
               className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
             />
+            
+            {/* Drawer */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -209,7 +231,10 @@ function Layout() {
                   <img src={PSS_LOGO} alt="PSS Logo" className="w-8 h-8 rounded-full" referrerPolicy="no-referrer" />
                   <span className="font-bold text-white">PSS Trust</span>
                 </div>
-                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-slate-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 text-slate-400 hover:text-white transition-colors"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -228,8 +253,8 @@ function Layout() {
                           to={item.path!}
                           onClick={() => setIsMenuOpen(false)}
                           className={`text-left text-base font-medium py-3 px-4 rounded-xl transition-all flex items-center justify-between group w-full ${
-                            activeSection === item.id
-                              ? 'bg-emerald-600/10 text-emerald-400'
+                            activeSection === item.id 
+                              ? 'bg-emerald-600/10 text-emerald-400' 
                               : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                           }`}
                         >
@@ -237,11 +262,12 @@ function Layout() {
                           <ArrowRight className={`w-4 h-4 transition-transform group-hover:translate-x-1 ${activeSection === item.id ? 'opacity-100' : 'opacity-0'}`} />
                         </Link>
                       )}
+                      
                       {item.hasDropdown && (
                         <div className="ml-4 mt-2 flex flex-col gap-1 border-l border-slate-800 pl-4">
                           {item.subItems?.map((sub, idx) => (
-                            <Link
-                              key={idx}
+                            <Link 
+                              key={idx} 
                               to={sub.path}
                               onClick={() => setIsMenuOpen(false)}
                               className="text-left py-2 text-sm flex items-center gap-3 text-slate-400 hover:text-white"
@@ -257,10 +283,18 @@ function Layout() {
               </div>
 
               <div className="p-6 border-t border-slate-800 space-y-4">
-                <Link to="/admin-login" onClick={() => setIsMenuOpen(false)} className="block w-full py-3 text-center text-sm font-bold bg-white text-slate-900 rounded-xl hover:bg-slate-100 transition-colors">
+                <Link 
+                  to="/admin-login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block w-full py-3 text-center text-sm font-bold bg-white text-slate-900 rounded-xl hover:bg-slate-100 transition-colors"
+                >
                   Admin Login
                 </Link>
-                <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="block w-full py-3 text-center text-sm font-bold bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 transition-colors">
+                <Link 
+                  to="/signup"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block w-full py-3 text-center text-sm font-bold bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 transition-colors"
+                >
                   Sign Up
                 </Link>
               </div>
@@ -269,71 +303,86 @@ function Layout() {
         )}
       </AnimatePresence>
 
-      {/* ── Main Content ─────────────────────────────────────── */}
+      {/* Main Content */}
       <main className="flex-1">
         <Outlet />
       </main>
 
-      {/* ── Footer ───────────────────────────────────────────── */}
+      {/* Footer / Bottom Info Section */}
       {!isDashboard && (
-        <footer className="bg-white py-10 px-6 lg:px-8 border-t border-slate-100">
-          <div className="max-w-7xl mx-auto flex flex-col gap-6">
+        <footer className="bg-white py-12 px-6 lg:px-8 text-slate-600 border-t border-slate-100">
+          <div className="max-w-7xl mx-auto">
 
             {/* Row 1 — Brand + Social */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              {/* Brand */}
-              <div className="flex items-center gap-3">
-                <img src={PSS_LOGO} alt="PSS Logo" className="w-11 h-11 rounded-full shadow-sm border-2 border-white" referrerPolicy="no-referrer" />
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-10">
+              <div className="flex items-center gap-4">
+                <img 
+                  src={PSS_LOGO} 
+                  alt="PSS Logo" 
+                  className="w-12 h-12 rounded-full shadow-md border-2 border-white" 
+                  referrerPolicy="no-referrer" 
+                />
                 <div className="flex flex-col">
-                  <span className="text-slate-900 font-extrabold text-base tracking-tight leading-tight">PSS Trust</span>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-[0.18em] font-bold">Charitable Foundation</span>
+                  <span className="text-slate-900 font-extrabold text-lg tracking-tight">PSS Trust</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Charitable Foundation</span>
                 </div>
               </div>
 
-              {/* Social icons */}
-              <div className="flex items-center gap-2">
-                <a href="https://www.facebook.com/people/PssTrust/100080242307255/" className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-all" aria-label="Facebook">
-                  <Facebook className="w-4 h-4" />
+              <div className="flex items-center gap-3 mt-[-20px] mb-[-28px]">
+                <a 
+                  href="https://www.facebook.com/people/PssTrust/100080242307255/" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
                 </a>
-                <a href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-700 transition-all" aria-label="LinkedIn">
-                  <Linkedin className="w-4 h-4" />
+                <a 
+                  href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="https://www.youtube.com/@psstrust" className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all" aria-label="YouTube">
-                  <Youtube className="w-4 h-4" />
+                <a 
+                  href="https://www.youtube.com/@psstrust" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-5 h-5" />
                 </a>
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-slate-100" />
-
             {/* Row 2 — Policy links + Copyright */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div className="flex flex-wrap justify-start gap-x-10 gap-y-4 pt-[20px] pb-[20px] border-y border-slate-50 mb-10">
+
               {/* Policy links */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <Link to="/privacy-policy" className="text-slate-400 hover:text-slate-700 text-[11px] font-medium transition-colors">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2">
+                <Link to="/privacy-policy" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
                   Privacy Policy
                 </Link>
                 <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/terms-of-service" className="text-slate-400 hover:text-slate-700 text-[11px] font-medium transition-colors">
+                <Link to="/terms-of-service" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
                   Terms of Service
                 </Link>
                 <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/data-retention" className="text-slate-400 hover:text-slate-700 text-[11px] font-medium transition-colors">
+                <Link to="/data-retention" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
                   Data Retention Policy
                 </Link>
                 <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/cookie-policy" className="text-slate-400 hover:text-slate-700 text-[11px] font-medium transition-colors">
+                <Link to="/cookie-policy" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
                   Cookie &amp; Storage Policy
                 </Link>
               </div>
 
               {/* Copyright */}
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest whitespace-nowrap">
-                © {new Date().getFullYear()} PSS Trust. All rights reserved.
-              </p>
-            </div>
+              <div className="text-left flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-[-30px] mb-[-20px]">
+                <p className="text-[11px] text-slate-400 font-bold uppercase tracking-[0.1em]">
+                  © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust
+                </p>
+              </div>
 
+            </div>
           </div>
         </footer>
       )}
@@ -361,6 +410,7 @@ function AppContent() {
   }, [registeredStudentId]);
 
   useEffect(() => {
+    // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -370,6 +420,7 @@ function AppContent() {
       }
     });
 
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -389,12 +440,14 @@ function AppContent() {
       setIsLoading(false);
       return;
     }
+
     try {
       const { data, error } = await supabase
         .from('incharges')
         .select('role')
         .eq('email', email)
         .single();
+
       if (error) throw error;
       setUserRole(data?.role || 'branch_incharge');
     } catch (error) {
@@ -406,7 +459,9 @@ function AppContent() {
   };
 
   useEffect(() => {
-    if (user) fetchStudents();
+    if (user) {
+      fetchStudents();
+    }
   }, [user]);
 
   const fetchStudents = async () => {
@@ -415,6 +470,7 @@ function AppContent() {
         .from('students')
         .select('*')
         .order('created_at', { ascending: false });
+
       if (error) throw error;
       setStudents(data || []);
     } catch (error) {
@@ -433,33 +489,29 @@ function AppContent() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        {/* Public pages */}
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/our-impact" element={<Impact />} />
         <Route path="/success-stories" element={<SuccessStories />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<Contact />} />
-
-        {/* Legal pages */}
         <Route path="/privacy-policy"   element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/data-retention"   element={<DataRetention />} />
         <Route path="/cookie-policy"    element={<CookiePolicy />} />
-
-        {/* Student portal */}
         <Route path="/signup" element={
-          <Signup
-            onBack={() => navigate(-1)}
+          <Signup 
+            onBack={() => navigate(-1)} 
             onSuccess={(id) => {
               setRegisteredStudentId(id);
               navigate('/face-registration');
-            }}
+            }} 
           />
         } />
+        
         <Route path="/face-registration" element={
           registeredStudentId ? (
-            <FaceRegistration
+            <FaceRegistration 
               studentId={registeredStudentId}
               onSuccess={() => {
                 setRegisteredStudentId(null);
@@ -474,17 +526,17 @@ function AppContent() {
             </div>
           )
         } />
-        <Route path="/daily-attendance"   element={<Attendance onBack={() => navigate(-1)} />} />
-        <Route path="/student-attendance" element={<StudentAttendance onBack={() => navigate(-1)} />} />
-        <Route path="/fee-application"    element={<FeeApplication onBack={() => navigate(-1)} />} />
-        <Route path="/check-status"       element={<CheckStatus onBack={() => navigate(-1)} />} />
 
-        {/* Admin */}
+        <Route path="/daily-attendance" element={<Attendance onBack={() => navigate(-1)} />} />
+        <Route path="/student-attendance" element={<StudentAttendance onBack={() => navigate(-1)} />} />
+        <Route path="/fee-application" element={<FeeApplication onBack={() => navigate(-1)} />} />
+        <Route path="/check-status" element={<CheckStatus onBack={() => navigate(-1)} />} />
+        
         <Route path="/admin-login" element={
           user ? (
             <div className="p-20 text-center">
               <p className="mb-4 text-slate-600">You are already logged in.</p>
-              <button
+              <button 
                 onClick={() => {
                   if (userRole === 'chairman') navigate('/chairman-dashboard');
                   else if (userRole === 'super_incharge') navigate('/super-incharge-dashboard');
@@ -496,23 +548,28 @@ function AppContent() {
               </button>
             </div>
           ) : (
-            <AdminLogin onBack={() => navigate(-1)} />
+            <AdminLogin 
+              onBack={() => navigate(-1)} 
+            />
           )
         } />
+        
         <Route path="/admin-otp" element={<AdminOtp />} />
-
-        {/* Legacy redirects */}
+        
+        {/* Redirect old routes to new admin login */}
         <Route path="/chairman-login" element={<Navigate to="/admin-login" replace />} />
-        <Route path="/incharge-login"  element={<Navigate to="/admin-login" replace />} />
-        <Route path="/chairman-otp"    element={<Navigate to="/admin-login" replace />} />
-        <Route path="/incharge-otp"    element={<Navigate to="/admin-login" replace />} />
-
-        {/* Dashboards */}
+        <Route path="/incharge-login" element={<Navigate to="/admin-login" replace />} />
+        <Route path="/chairman-otp" element={<Navigate to="/admin-login" replace />} />
+        <Route path="/incharge-otp" element={<Navigate to="/admin-login" replace />} />
+        
         <Route path="/chairman-dashboard" element={
           user && userRole === 'chairman' ? (
-            <ChairmanDashboard
-              students={students}
-              onLogout={async () => { await supabase.auth.signOut(); navigate('/'); }}
+            <ChairmanDashboard 
+              students={students} 
+              onLogout={async () => {
+                await supabase.auth.signOut();
+                navigate('/');
+              }} 
               onChangePassword={() => navigate('/change-password')}
             />
           ) : (
@@ -522,10 +579,14 @@ function AppContent() {
             </div>
           )
         } />
+
         <Route path="/super-incharge-dashboard" element={
           user && userRole === 'super_incharge' ? (
-            <SuperInchargeDashboard
-              onLogout={async () => { await supabase.auth.signOut(); navigate('/'); }}
+            <SuperInchargeDashboard 
+              onLogout={async () => {
+                await supabase.auth.signOut();
+                navigate('/');
+              }} 
               onChangePassword={() => navigate('/change-password')}
             />
           ) : (
@@ -535,10 +596,14 @@ function AppContent() {
             </div>
           )
         } />
+
         <Route path="/incharge-dashboard" element={
           user && userRole === 'branch_incharge' ? (
-            <InchargeDashboard
-              onLogout={async () => { await supabase.auth.signOut(); navigate('/'); }}
+            <InchargeDashboard 
+              onLogout={async () => {
+                await supabase.auth.signOut();
+                navigate('/');
+              }} 
               onChangePassword={() => navigate('/change-password')}
             />
           ) : (
@@ -548,11 +613,12 @@ function AppContent() {
             </div>
           )
         } />
+        
         <Route path="/change-password" element={
           user ? (
-            <ChangePassword
+            <ChangePassword 
               chairmanEmail={chairmanEmail}
-              onBack={() => navigate('/chairman-dashboard')}
+              onBack={() => navigate('/chairman-dashboard')} 
             />
           ) : (
             <div className="p-20 text-center">

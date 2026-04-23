@@ -97,13 +97,20 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
       
       console.log('Verified student for fee application:', student);
 
-      // Read trust_attendance_percentage directly from the students table
-      // (kept up-to-date automatically by a Postgres trigger on the attendance table)
-      const rawPct = student.trust_attendance_percentage;
-      const trustAttendanceValue =
-        rawPct !== null && rawPct !== undefined
-          ? `${parseFloat(rawPct).toFixed(1)}%`
-          : 'N/A';
+      // Calculate Attendance Score using the exact same formula as the Student Attendance page:
+      //   Attendance Score = (presentDays / 365) * 100  →  toFixed(1) + "%"
+      // present = 1, H/HP = 0.5, everything else = 0
+      const { data: attendanceLogs } = await supabase
+        .from('attendance')
+        .select('status')
+        .eq('student_id', student.id);
+
+      const presentDays = (attendanceLogs || []).reduce((acc: number, log: any) => {
+        if (log.status === 'present') return acc + 1;
+        if (log.status === 'H' || log.status === 'HP') return acc + 0.5;
+        return acc;
+      }, 0);
+      const trustAttendanceValue = `${((presentDays / 365) * 100).toFixed(1)}%`;
 
       const studentEmail = student.email;
       setFormData(prev => ({

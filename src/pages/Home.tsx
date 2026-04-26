@@ -54,7 +54,7 @@ export default function Home() {
       {/* Hero Section */}
       <section id="home" className="relative pt-12 lg:pt-20 pb-20 lg:pb-32 px-6 lg:px-8 bg-slate-50 overflow-hidden">
         <img
-          src="https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/974e4549-30b9-4cce-9a10-4ea107da6b4f.png"
+          src="https://rdnrbgocszptdiljdcvw.supabase.co/storage/v1/object/public/shared-files/7173b553-2c48-4f0a-9338-6c5ee1e3814d/44efb25b-9e3f-4b6b-8182-121e27a117b5.png"
           alt="bg"
           className="w-full h-full object-cover"
         />

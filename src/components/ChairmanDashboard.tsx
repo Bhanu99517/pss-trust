@@ -38,6 +38,8 @@ interface Student {
   full_name: string;
   father_name: string;
   mother_name?: string;
+  father_mobile?: string;
+  mother_mobile?: string;
   dob?: string;
   gender?: string;
   email: string;

@@ -539,6 +539,8 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
           full_name: editingStudent.full_name,
           father_name: editingStudent.father_name,
           mother_name: editingStudent.mother_name,
+          father_mobile: editingStudent.father_mobile,
+          mother_mobile: editingStudent.mother_mobile,
           dob: editingStudent.dob,
           gender: editingStudent.gender,
           email: editingStudent.email,
@@ -1900,10 +1902,22 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                       <div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase">Father's Name</p>
                         <p className="text-sm font-bold text-slate-700">{selectedStudent.father_name}</p>
+                        {selectedStudent.father_mobile && (
+                          <p className="text-xs text-slate-500 flex items-center gap-1">
+                            <Phone className="w-3 h-3" />
+                            {selectedStudent.father_mobile}
+                          </p>
+                        )}
                       </div>
                       <div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase">Mother's Name</p>
                         <p className="text-sm font-bold text-slate-700">{selectedStudent.mother_name || 'N/A'}</p>
+                        {selectedStudent.mother_mobile && (
+                          <p className="text-xs text-slate-500 flex items-center gap-1">
+                            <Phone className="w-3 h-3" />
+                            {selectedStudent.mother_mobile}
+                          </p>
+                        )}
                       </div>
                       <div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase">Date of Birth</p>
@@ -2079,12 +2093,30 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                       />
                     </div>
                     <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Father Mobile</label>
+                      <input 
+                        type="tel"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-medium"
+                        value={editingStudent.father_mobile || ''}
+                        onChange={(e) => setEditingStudent({...editingStudent, father_mobile: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase">Mother's Name</label>
                       <input 
                         type="text"
                         className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-medium"
                         value={editingStudent.mother_name || ''}
                         onChange={(e) => setEditingStudent({...editingStudent, mother_name: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Mother Mobile</label>
+                      <input 
+                        type="tel"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 outline-none transition-all font-medium"
+                        value={editingStudent.mother_mobile || ''}
+                        onChange={(e) => setEditingStudent({...editingStudent, mother_mobile: e.target.value})}
                       />
                     </div>
                     <div className="space-y-2">

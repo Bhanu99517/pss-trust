@@ -5,7 +5,8 @@ import { supabase } from '../supabaseClient';
 
 interface FaceRegistrationProps {
   studentId: string;
-  onSuccess: () => void;
+  onSuccess?: () => void;
+  onComplete?: () => void;
   title?: string;
   subtitle?: string;
   className?: string;
@@ -15,7 +16,8 @@ const MODEL_URL = '/models';
 
 export default function FaceRegistration({ 
   studentId, 
-  onSuccess, 
+  onSuccess,
+  onComplete, 
   title = "Face Registration",
   subtitle = "Secure your account with face recognition",
   className = "min-h-screen bg-[#F8FAFC] flex items-center justify-center p-6"
@@ -158,7 +160,7 @@ export default function FaceRegistration({
 
       setIsSuccess(true);
       stopVideo();
-      setTimeout(onSuccess, 2000);
+      setTimeout(() => { onSuccess?.(); onComplete?.(); }, 2000);
     } catch (err: any) {
       setError('Failed to register face: ' + err.message);
     } finally {

@@ -290,6 +290,10 @@ pss-trust-original/
 
 All tables are in the public schema of your Supabase PostgreSQL instance, with **Row Level Security (RLS) enabled** on every table.
 
+![Database Schema](./docs/schema.svg)
+ 
+> *Entity-relationship diagram generated from Supabase Schema Visualizer.*
+
 ### `students`
 Stores student profiles created at signup.
 
